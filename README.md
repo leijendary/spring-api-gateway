@@ -17,7 +17,7 @@
 - Caffeine
 - Docker
 - JUnit
-- 
+
 # Spring API Gateway Template
 
 ### To run the code:
