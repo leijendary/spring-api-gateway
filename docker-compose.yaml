@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  spring-api-gateway:
+    build: .
+    container_name: spring-api-gateway
+    ports:
+      - "443:443"
+    env_file: .docker.env
+    networks:
+      - redis_network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.25"
+          memory: 512M
+
+networks:
+  redis_network:
+    name: redis_network
+    external: true

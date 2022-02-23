@@ -1,0 +1,103 @@
+info:
+  app:
+    organization: leijendary
+    group: ${group}
+    name: ${name}
+    description: ${description}
+    version: ${version}
+  api:
+    termsOfService:
+    contact:
+      name: Jonathan Leijendekker
+      url: https://leijendary.com
+      email:
+    license:
+      name: Jonathan Leijendekker
+      url: https://leijendary.com
+
+auth:
+  audience: http://localhost:8080
+  jwkSetUri: https://leijendary.us.auth0.com/.well-known/jwks.json
+
+retry:
+  retries: 3
+  backoff:
+    firstBackoff: 5
+    maxBackoff: 20
+    factor: 2
+
+request:
+  maxSize: 100MB
+
+spring:
+  application:
+    name: \${info.app.name}
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
+  messages:
+    basename: messages.access, messages.error
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            sample:
+              - instanceId: sample
+                uri: https://localhost:8443
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowCredentials: true
+            allowedOriginPatterns: '*'
+            allowedMethods: '*'
+            allowedHeaders: '*'
+      httpclient:
+        connectTimeout: 60000
+        responseTimeout: 1m
+        ssl:
+          useInsecureTrustManager: true
+        wiretap: true
+      httpserver:
+        wiretap: true
+      redisRateLimiter:
+        config:
+          defaultFilters:
+            replenishRate: 10
+            burstCapacity: 20
+            requestedTokens: 1
+    serviceRegistry:
+      autoRegistration:
+        enabled: false
+
+  redis:
+    host: localhost
+    ssl: false
+
+management:
+  endpoint:
+    health:
+      showDetails: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: health,gateway
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+  http2:
+    enabled: true
+  port: 443
+  ssl:
+    enabled: true
+    keyAlias: spring-boot
+    keyStoreType: PKCS12
+    keyStore: classpath:ssl/keystore.p12
+    keyStorePassword: spring-boot
+  tomcat:
+    threads:
+      max: 500

@@ -1,0 +1,3 @@
+auth:
+  audience: https://staging.leijendary.com
+  jwkSetUri: http://authentication.staging:8443/authentication/api/v1/.well-known/jwks.json
