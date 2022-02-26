@@ -24,8 +24,8 @@ private val standardResponseGatewayFilterFactory = getBean(StandardResponseGatew
 private val traceIdHeaderGatewayFilterFactory = getBean(TraceIdHeaderGatewayFilterFactory::class.java)
 
 fun GatewayFilterSpec.defaultFilters(responseType: Class<*>? = null, filterSpecs: () -> GatewayFilterSpec) {
-    setRequestSize(requestProperties.maxSize)
     traceIdHeader(HEADER_TRACE_ID)
+    setRequestSize(requestProperties.maxSize)
     requestRateLimiter {
         it.keyResolver = remoteAddressKeyResolver
         it.rateLimiter = redisRateLimiter

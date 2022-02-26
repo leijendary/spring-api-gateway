@@ -4,7 +4,6 @@ import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory.NameConfig
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Mono.fromRunnable
 import java.util.UUID.randomUUID
 
 @Component
@@ -19,9 +18,10 @@ class TraceIdHeaderGatewayFilterFactory : GatewayFilterFactory<NameConfig> {
         val request = exchange.request.mutate()
             .headers { it[name] = traceId }
             .build()
+        val response = exchange.response
+        response.headers[name] = traceId
 
         chain.filter(exchange.mutate().request(request).build())
-            .then(fromRunnable { exchange.response.headers[name] = traceId })
     }
 
     override fun getConfigClass(): Class<NameConfig> = NameConfig::class.java
