@@ -22,7 +22,7 @@ class RouteConfiguration {
             order(2)
             filters {
                 defaultFilters(PageResponse::class.java) {
-                    authenticated("urn:sample:list:v1")
+                    authenticated("urn:sample:list:v2")
                 }
             }
         }
