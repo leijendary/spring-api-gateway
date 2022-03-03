@@ -22,6 +22,12 @@ private val requestProperties = getBean(RequestProperties::class.java)
 private val retryProperties = getBean(RetryProperties::class.java)
 private val standardResponseGatewayFilterFactory = getBean(StandardResponseGatewayFilterFactory::class.java)
 private val traceIdHeaderGatewayFilterFactory = getBean(TraceIdHeaderGatewayFilterFactory::class.java)
+private val backoff = BackoffConfig(
+    ofMillis(retryProperties.backoff.firstBackoff),
+    ofMillis(retryProperties.backoff.maxBackoff),
+    retryProperties.backoff.factor,
+    true
+)
 
 fun GatewayFilterSpec.defaultFilters(responseType: Class<*>? = null, filterSpecs: () -> GatewayFilterSpec) {
     traceIdHeader(HEADER_TRACE_ID)
@@ -33,12 +39,7 @@ fun GatewayFilterSpec.defaultFilters(responseType: Class<*>? = null, filterSpecs
     filterSpecs()
     retry {
         it.retries = retryProperties.retries
-        it.backoff = BackoffConfig(
-            ofMillis(retryProperties.backoff.firstBackoff),
-            ofMillis(retryProperties.backoff.maxBackoff),
-            retryProperties.backoff.factor,
-            true
-        )
+        it.backoff = backoff
         it.setStatuses(BAD_GATEWAY, SERVICE_UNAVAILABLE)
     }
     standardResponse(responseType)
