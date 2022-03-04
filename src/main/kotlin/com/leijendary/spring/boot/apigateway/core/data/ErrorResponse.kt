@@ -1,6 +1,6 @@
 package com.leijendary.spring.boot.apigateway.core.data
 
-import com.leijendary.spring.boot.apigateway.core.util.fullPath
+import com.leijendary.spring.boot.apigateway.core.extension.fullPath
 import org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR
 import java.net.URI
 import java.time.Instant.now

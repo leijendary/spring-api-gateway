@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.leijendary.spring.boot.apigateway.core.data.*
-import com.leijendary.spring.boot.apigateway.core.util.AnyUtil.toJson
+import com.leijendary.spring.boot.apigateway.core.extension.AnyExtension.toJson
 import com.leijendary.spring.boot.apigateway.core.util.SpringContext.Companion.getBean
 import org.reactivestreams.Publisher
 import org.springframework.core.io.buffer.DataBuffer

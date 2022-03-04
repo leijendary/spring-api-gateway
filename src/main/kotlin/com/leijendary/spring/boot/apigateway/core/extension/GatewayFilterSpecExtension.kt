@@ -1,4 +1,4 @@
-package com.leijendary.spring.boot.apigateway.core.util
+package com.leijendary.spring.boot.apigateway.core.extension
 
 import com.leijendary.spring.boot.apigateway.core.config.properties.RequestProperties
 import com.leijendary.spring.boot.apigateway.core.config.properties.RetryProperties

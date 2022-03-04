@@ -1,6 +1,6 @@
 package com.leijendary.spring.boot.apigateway.core.data
 
-import com.leijendary.spring.boot.apigateway.core.util.fullPath
+import com.leijendary.spring.boot.apigateway.core.extension.fullPath
 import org.springframework.http.HttpStatus.OK
 import org.springframework.web.util.UriComponentsBuilder.fromUri
 import java.net.URI

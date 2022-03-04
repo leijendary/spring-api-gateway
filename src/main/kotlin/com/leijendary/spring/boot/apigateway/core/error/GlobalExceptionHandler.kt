@@ -4,9 +4,9 @@ import com.leijendary.spring.boot.apigateway.core.data.ErrorData
 import com.leijendary.spring.boot.apigateway.core.data.ErrorResponse
 import com.leijendary.spring.boot.apigateway.core.data.ErrorResponse.ErrorResponseBuilder
 import com.leijendary.spring.boot.apigateway.core.exception.ErrorDataException
-import com.leijendary.spring.boot.apigateway.core.util.AnyUtil.toJson
-import com.leijendary.spring.boot.apigateway.core.util.fullPath
-import com.leijendary.spring.boot.apigateway.core.util.logger
+import com.leijendary.spring.boot.apigateway.core.extension.AnyExtension.toJson
+import com.leijendary.spring.boot.apigateway.core.extension.fullPath
+import com.leijendary.spring.boot.apigateway.core.extension.logger
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale

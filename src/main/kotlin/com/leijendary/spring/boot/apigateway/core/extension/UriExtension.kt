@@ -1,4 +1,4 @@
-package com.leijendary.spring.boot.apigateway.core.util
+package com.leijendary.spring.boot.apigateway.core.extension
 
 import java.net.URI
 

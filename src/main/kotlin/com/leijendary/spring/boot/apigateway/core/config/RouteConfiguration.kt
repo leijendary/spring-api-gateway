@@ -1,8 +1,8 @@
 package com.leijendary.spring.boot.apigateway.core.config
 
 import com.leijendary.spring.boot.apigateway.core.data.PageResponse
-import com.leijendary.spring.boot.apigateway.core.util.authenticated
-import com.leijendary.spring.boot.apigateway.core.util.defaultFilters
+import com.leijendary.spring.boot.apigateway.core.extension.authenticated
+import com.leijendary.spring.boot.apigateway.core.extension.defaultFilters
 import org.springframework.cloud.gateway.route.RouteLocator
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder
 import org.springframework.cloud.gateway.route.builder.RouteLocatorDsl

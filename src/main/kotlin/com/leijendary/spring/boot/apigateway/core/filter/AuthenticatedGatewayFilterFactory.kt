@@ -3,8 +3,8 @@ package com.leijendary.spring.boot.apigateway.core.filter
 import com.leijendary.spring.boot.apigateway.core.data.ErrorData
 import com.leijendary.spring.boot.apigateway.core.exception.AccessDeniedException
 import com.leijendary.spring.boot.apigateway.core.exception.UnauthorizedException
+import com.leijendary.spring.boot.apigateway.core.extension.logger
 import com.leijendary.spring.boot.apigateway.core.filter.AuthenticatedGatewayFilterFactory.Config
-import com.leijendary.spring.boot.apigateway.core.util.logger
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
 import org.springframework.context.MessageSource

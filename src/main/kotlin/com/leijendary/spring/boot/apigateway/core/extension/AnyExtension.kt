@@ -1,10 +1,10 @@
-package com.leijendary.spring.boot.apigateway.core.util
+package com.leijendary.spring.boot.apigateway.core.extension
 
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.leijendary.spring.boot.apigateway.core.util.SpringContext.Companion.getBean
 
-object AnyUtil {
+object AnyExtension {
     private val log = logger()
     private val mapper: ObjectMapper = getBean(ObjectMapper::class.java)
 
