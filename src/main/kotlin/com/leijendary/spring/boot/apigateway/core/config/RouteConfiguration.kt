@@ -1,6 +1,5 @@
 package com.leijendary.spring.boot.apigateway.core.config
 
-import com.leijendary.spring.boot.apigateway.core.data.PageResponse
 import com.leijendary.spring.boot.apigateway.core.extension.authenticated
 import com.leijendary.spring.boot.apigateway.core.extension.defaultFilters
 import org.springframework.cloud.gateway.route.RouteLocator
@@ -21,7 +20,7 @@ class RouteConfiguration {
             method(GET)
             order(2)
             filters {
-                defaultFilters(PageResponse::class.java) {
+                defaultFilters {
                     authenticated("urn:sample:list:v1")
                 }
             }

@@ -3,7 +3,6 @@ package com.leijendary.spring.boot.apigateway.core.extension
 import com.leijendary.spring.boot.apigateway.core.config.properties.RequestProperties
 import com.leijendary.spring.boot.apigateway.core.config.properties.RetryProperties
 import com.leijendary.spring.boot.apigateway.core.filter.AuthenticatedGatewayFilterFactory
-import com.leijendary.spring.boot.apigateway.core.filter.StandardResponseGatewayFilterFactory
 import com.leijendary.spring.boot.apigateway.core.filter.TraceIdHeaderGatewayFilterFactory
 import com.leijendary.spring.boot.apigateway.core.filter.TraceIdHeaderGatewayFilterFactory.Companion.HEADER_TRACE_ID
 import com.leijendary.spring.boot.apigateway.core.resolver.RemoteAddressKeyResolver
@@ -20,7 +19,6 @@ private val redisRateLimiter = getBean(RedisRateLimiter::class.java)
 private val remoteAddressKeyResolver = getBean(RemoteAddressKeyResolver::class.java)
 private val requestProperties = getBean(RequestProperties::class.java)
 private val retryProperties = getBean(RetryProperties::class.java)
-private val standardResponseGatewayFilterFactory = getBean(StandardResponseGatewayFilterFactory::class.java)
 private val traceIdHeaderGatewayFilterFactory = getBean(TraceIdHeaderGatewayFilterFactory::class.java)
 private val backoff = BackoffConfig(
     ofMillis(retryProperties.backoff.firstBackoff),
@@ -29,7 +27,7 @@ private val backoff = BackoffConfig(
     true
 )
 
-fun GatewayFilterSpec.defaultFilters(responseType: Class<*>? = null, filterSpecs: () -> GatewayFilterSpec) {
+fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
     traceIdHeader(HEADER_TRACE_ID)
     setRequestSize(requestProperties.maxSize)
     requestRateLimiter {
@@ -42,7 +40,6 @@ fun GatewayFilterSpec.defaultFilters(responseType: Class<*>? = null, filterSpecs
         it.backoff = backoff
         it.setStatuses(BAD_GATEWAY, SERVICE_UNAVAILABLE)
     }
-    standardResponse(responseType)
 }
 
 fun GatewayFilterSpec.authenticated(vararg scopes: String): GatewayFilterSpec {
@@ -51,8 +48,4 @@ fun GatewayFilterSpec.authenticated(vararg scopes: String): GatewayFilterSpec {
 
 fun GatewayFilterSpec.traceIdHeader(name: String): GatewayFilterSpec {
     return filter(traceIdHeaderGatewayFilterFactory.apply { it.name = name })
-}
-
-fun GatewayFilterSpec.standardResponse(responseType: Class<*>? = null): GatewayFilterSpec {
-    return filter(standardResponseGatewayFilterFactory.apply { it.responseType = responseType })
 }
