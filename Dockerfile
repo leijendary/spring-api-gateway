@@ -6,7 +6,7 @@ COPY settings.gradle.kts .
 RUN --mount=type=cache,target=/root/.m2 gradle bootJar -x test
 RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
 
-FROM openjdk:17-slim
+FROM eclipse-temurin:17-jre
 VOLUME /app
 ARG DEPENDENCY=/workspace/app/build/dependency
 COPY --from=build ${DEPENDENCY}/BOOT-INF/lib /app/lib

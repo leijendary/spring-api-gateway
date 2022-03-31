@@ -43,9 +43,8 @@ spring:
       client:
         simple:
           instances:
-            sample:
-              - instanceId: sample
-                uri: https://localhost:8443
+            google:
+              - uri: https://google.com
     gateway:
       globalcors:
         corsConfigurations:
@@ -71,10 +70,9 @@ spring:
     serviceRegistry:
       autoRegistration:
         enabled: false
-
   redis:
-    host: localhost
-    ssl: false
+    host:
+    port:
 
 management:
   endpoint:
@@ -91,13 +89,7 @@ server:
       enabled: false
   http2:
     enabled: true
-  port: 443
-  ssl:
-    enabled: true
-    keyAlias: spring-boot
-    keyStoreType: PKCS12
-    keyStore: classpath:ssl/keystore.p12
-    keyStorePassword: spring-boot
+  port: 80
   tomcat:
     threads:
       max: 500

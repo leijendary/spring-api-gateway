@@ -17,6 +17,7 @@
 - Caffeine
 - Docker
 - JUnit
+- Kubernetes
 
 # Spring API Gateway Template
 
@@ -31,7 +32,3 @@
 ### To build a JAR file:
 
 `./gradlew bootJar -x test`
-
-### To generate a certificate:
-
-`keytool -genkeypair -alias spring-boot -keyalg RSA -keysize 2048 -validity 3650 -keypass spring-boot -storetype PKCS12 -keystore keystore.p12`
