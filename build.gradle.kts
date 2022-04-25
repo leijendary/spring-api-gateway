@@ -8,7 +8,7 @@ plugins {
     kotlin("plugin.spring") version "1.6.10"
 }
 
-group = "com.leijendary.spring.boot"
+group = "com.leijendary.spring.apigateway"
 version = "1.0.0"
 description = "Spring Boot API Gateway Template for the Microservice Architecture or general purpose"
 java.sourceCompatibility = JavaVersion.VERSION_11
