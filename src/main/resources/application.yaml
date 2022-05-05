@@ -73,6 +73,8 @@ spring:
   redis:
     host:
     port:
+  sleuth:
+    traceId128: true
 
 management:
   endpoint:

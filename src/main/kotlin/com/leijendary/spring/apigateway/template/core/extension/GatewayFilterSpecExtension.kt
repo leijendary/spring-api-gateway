@@ -3,8 +3,6 @@ package com.leijendary.spring.apigateway.template.core.extension
 import com.leijendary.spring.apigateway.template.core.config.properties.RequestProperties
 import com.leijendary.spring.apigateway.template.core.config.properties.RetryProperties
 import com.leijendary.spring.apigateway.template.core.filter.AuthenticatedGatewayFilterFactory
-import com.leijendary.spring.apigateway.template.core.filter.TraceIdHeaderGatewayFilterFactory
-import com.leijendary.spring.apigateway.template.core.filter.TraceIdHeaderGatewayFilterFactory.Companion.HEADER_TRACE_ID
 import com.leijendary.spring.apigateway.template.core.resolver.RemoteAddressKeyResolver
 import com.leijendary.spring.apigateway.template.core.util.SpringContext.Companion.getBean
 import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory.BackoffConfig
@@ -19,7 +17,6 @@ private val redisRateLimiter = getBean(RedisRateLimiter::class.java)
 private val remoteAddressKeyResolver = getBean(RemoteAddressKeyResolver::class.java)
 private val requestProperties = getBean(RequestProperties::class.java)
 private val retryProperties = getBean(RetryProperties::class.java)
-private val traceIdHeaderGatewayFilterFactory = getBean(TraceIdHeaderGatewayFilterFactory::class.java)
 private val backoff = BackoffConfig(
     ofMillis(retryProperties.backoff.firstBackoff),
     ofMillis(retryProperties.backoff.maxBackoff),
@@ -28,7 +25,6 @@ private val backoff = BackoffConfig(
 )
 
 fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
-    traceIdHeader(HEADER_TRACE_ID)
     setRequestSize(requestProperties.maxSize)
     requestRateLimiter {
         it.keyResolver = remoteAddressKeyResolver
@@ -44,8 +40,4 @@ fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
 
 fun GatewayFilterSpec.authenticated(vararg scopes: String): GatewayFilterSpec {
     return filter(authenticatedGatewayFilterFactory.apply { it.scopes = scopes.toSet() })
-}
-
-fun GatewayFilterSpec.traceIdHeader(name: String): GatewayFilterSpec {
-    return filter(traceIdHeaderGatewayFilterFactory.apply { it.name = name })
 }
