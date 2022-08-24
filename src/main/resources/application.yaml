@@ -75,6 +75,12 @@ spring:
     port:
   sleuth:
     traceId128: true
+    otel:
+      config:
+        traceIdRatioBased: 1
+      exporter:
+        jaeger:
+          endpoint:
 
 management:
   endpoint:
@@ -83,7 +89,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,gateway
+        include: health, gateway, prometheus
 
 server:
   error:
@@ -91,7 +97,10 @@ server:
       enabled: false
   http2:
     enabled: true
-  port: 80
-  tomcat:
-    threads:
-      max: 500
+  port: 443
+  ssl:
+    enabled: true
+    keyAlias: spring-boot
+    keyStoreType: PKCS12
+    keyStore: classpath:ssl/keystore.p12
+    keyStorePassword: spring-boot

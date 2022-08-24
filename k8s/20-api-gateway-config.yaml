@@ -7,3 +7,4 @@ data:
   SPRING_REDIS_HOST: redis-service.cache.svc.cluster.local
   SPRING_REDIS_PORT: "6379"
   SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0_URI: http://spring-template-service.template.svc.cluster.local
+  SPRING_SLEUTH_OTEL_EXPORTER_JAEGER_ENDPOINT: http://jaeger-service.monitoring.svc.cluster.local:14250/

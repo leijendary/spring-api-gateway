@@ -1,20 +1,27 @@
 version: "3.9"
 services:
-  spring-api-gateway:
+  spring-api-gateway-template:
     build: .
-    container_name: spring-api-gateway
+    container_name: spring-api-gateway-template
     ports:
       - "443:443"
     env_file: .docker.env
     networks:
       - redis_network
+      - jaeger_network
     deploy:
       resources:
-        limits:
-          cpus: "0.25"
+        reservations:
           memory: 512M
+          cpus: "0.25"
+        limits:
+          memory: 512M
+          cpus: "0.25"
 
 networks:
   redis_network:
     name: redis_network
+    external: true
+  jaeger_network:
+    name: jaeger_network
     external: true

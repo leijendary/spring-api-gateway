@@ -5,18 +5,21 @@
 
 # Technologies Used:
 
+- Kotlin
+- Spring Actuator
 - Spring Cloud Gateway
 - Spring Cloud LoadBalancer
-- Spring Security OAuth2 JOSE
-- Spring Actuator
+- Spring Cloud OpenTelemetry
+- Spring Cloud Sleuth
 - Spring Configuration Processor
-- Spring Autoconfigure Processor
-- Spring Devtools
 - Spring Data Redis Reactive
-- Swagger
+- Spring Devtools
+- Spring Security OAuth2 JOSE
 - Caffeine
 - Docker
 - JUnit
+- OpenAPI
+- Prometheus
 - Kubernetes
 
 # Spring API Gateway Template
@@ -32,3 +35,7 @@
 ### To build a JAR file:
 
 `./gradlew bootJar -x test`
+
+### To generate a certificate:
+
+`keytool -genkeypair -alias spring-boot -keyalg RSA -keysize 2048 -validity 3650 -keypass spring-boot -storetype PKCS12 -keystore keystore.p12`
