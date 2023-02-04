@@ -3,8 +3,10 @@ package com.leijendary.spring.apigateway.template.core.extension
 import com.leijendary.spring.apigateway.template.core.config.properties.RequestProperties
 import com.leijendary.spring.apigateway.template.core.config.properties.RetryProperties
 import com.leijendary.spring.apigateway.template.core.filter.AuthenticatedGatewayFilterFactory
+import com.leijendary.spring.apigateway.template.core.filter.HEADER_TRACE_ID
 import com.leijendary.spring.apigateway.template.core.resolver.RemoteAddressKeyResolver
 import com.leijendary.spring.apigateway.template.core.util.SpringContext.Companion.getBean
+import org.springframework.cloud.gateway.filter.factory.DedupeResponseHeaderGatewayFilterFactory.Strategy.RETAIN_FIRST
 import org.springframework.cloud.gateway.filter.factory.RetryGatewayFilterFactory.BackoffConfig
 import org.springframework.cloud.gateway.filter.ratelimit.RedisRateLimiter
 import org.springframework.cloud.gateway.route.builder.GatewayFilterSpec
@@ -33,6 +35,7 @@ fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
         it.backoff = backoff
         it.setStatuses(BAD_GATEWAY, SERVICE_UNAVAILABLE)
     }
+    dedupeResponseHeader(HEADER_TRACE_ID, RETAIN_FIRST.name)
 }
 
 fun GatewayFilterSpec.authenticated(vararg scopes: String): GatewayFilterSpec {

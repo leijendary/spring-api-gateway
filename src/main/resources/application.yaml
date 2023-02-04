@@ -59,6 +59,8 @@ spring:
         wiretap: true
       httpserver:
         wiretap: true
+      loadbalancer:
+        use404: true
       redisRateLimiter:
         config:
           defaultFilters:
@@ -88,6 +90,8 @@ server:
 
 management:
   endpoint:
+    gateway:
+      enabled: true
     health:
       showDetails: ALWAYS
   endpoints:
