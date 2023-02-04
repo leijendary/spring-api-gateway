@@ -4,6 +4,7 @@ import org.springframework.beans.BeansException
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ApplicationContextAware
 import org.springframework.stereotype.Component
+import kotlin.reflect.KClass
 
 @Component
 class SpringContext : ApplicationContextAware {
@@ -15,8 +16,8 @@ class SpringContext : ApplicationContextAware {
     companion object {
         private var context: ApplicationContext? = null
 
-        fun <T> getBean(beanClass: Class<T>): T {
-            return context!!.getBean(beanClass)
+        fun <T : Any> getBean(beanClass: KClass<T>): T {
+            return context!!.getBean(beanClass.java)
         }
     }
 }

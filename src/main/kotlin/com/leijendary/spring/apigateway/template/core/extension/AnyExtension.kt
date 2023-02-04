@@ -6,7 +6,7 @@ import com.leijendary.spring.apigateway.template.core.util.SpringContext.Compani
 
 object AnyExtension {
     private val log = logger()
-    private val mapper: ObjectMapper = getBean(ObjectMapper::class.java)
+    private val mapper = getBean(ObjectMapper::class)
 
     fun Any.toJson(): String? {
         try {

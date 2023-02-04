@@ -12,11 +12,11 @@ import org.springframework.http.HttpStatus.BAD_GATEWAY
 import org.springframework.http.HttpStatus.SERVICE_UNAVAILABLE
 import java.time.Duration.ofMillis
 
-private val authenticatedGatewayFilterFactory = getBean(AuthenticatedGatewayFilterFactory::class.java)
-private val redisRateLimiter = getBean(RedisRateLimiter::class.java)
-private val remoteAddressKeyResolver = getBean(RemoteAddressKeyResolver::class.java)
-private val requestProperties = getBean(RequestProperties::class.java)
-private val retryProperties = getBean(RetryProperties::class.java)
+private val authenticatedGatewayFilterFactory = getBean(AuthenticatedGatewayFilterFactory::class)
+private val redisRateLimiter = getBean(RedisRateLimiter::class)
+private val remoteAddressKeyResolver = getBean(RemoteAddressKeyResolver::class)
+private val requestProperties = getBean(RequestProperties::class)
+private val retryProperties = getBean(RetryProperties::class)
 private val backoff = BackoffConfig(
     ofMillis(retryProperties.backoff.firstBackoff),
     ofMillis(retryProperties.backoff.maxBackoff),
