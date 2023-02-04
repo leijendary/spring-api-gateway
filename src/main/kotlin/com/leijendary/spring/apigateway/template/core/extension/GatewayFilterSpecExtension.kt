@@ -22,11 +22,11 @@ private val backoff = retryProperties.backoff.let {
 }
 
 fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
-    setRequestSize(requestProperties.maxSize)
     requestRateLimiter {
         it.keyResolver = remoteAddressKeyResolver
         it.rateLimiter = redisRateLimiter
     }
+    setRequestSize(requestProperties.maxSize)
     filterSpecs()
     retry {
         it.retries = retryProperties.retries
