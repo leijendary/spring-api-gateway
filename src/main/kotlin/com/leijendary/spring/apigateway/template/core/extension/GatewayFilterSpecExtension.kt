@@ -17,12 +17,9 @@ private val redisRateLimiter = getBean(RedisRateLimiter::class)
 private val remoteAddressKeyResolver = getBean(RemoteAddressKeyResolver::class)
 private val requestProperties = getBean(RequestProperties::class)
 private val retryProperties = getBean(RetryProperties::class)
-private val backoff = BackoffConfig(
-    ofMillis(retryProperties.backoff.firstBackoff),
-    ofMillis(retryProperties.backoff.maxBackoff),
-    retryProperties.backoff.factor,
-    true
-)
+private val backoff = retryProperties.backoff.let {
+    BackoffConfig(ofMillis(it.firstBackoff), ofMillis(it.maxBackoff), it.factor, true)
+}
 
 fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
     setRequestSize(requestProperties.maxSize)
