@@ -22,7 +22,7 @@ class TraceFilter(private val tracer: Tracer) : GlobalFilter {
 
                 val traceId = tracer.nextSpan().context().traceId()
 
-                exchange.response.headers.set(HEADER_TRACE_ID, traceId)
+                exchange.response.headers[HEADER_TRACE_ID] = traceId
 
                 it
             }
