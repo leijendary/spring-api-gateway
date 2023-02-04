@@ -16,8 +16,8 @@ info:
       url: https://leijendary.com
 
 auth:
-  audience: http://localhost:8080
-  jwkSetUri: https://leijendary.us.auth0.com/.well-known/jwks.json
+  audiences: http://localhost:8080
+  jwkSetUri: https://leijendary.eu.auth0.com/.well-known/jwks.json
 
 retry:
   retries: 3
@@ -32,10 +32,8 @@ request:
 spring:
   application:
     name: \${info.app.name}
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration
-      - org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
+  main:
+    bannerMode: log
   messages:
     basename: messages.access, messages.error
   cloud:
@@ -43,7 +41,7 @@ spring:
       client:
         simple:
           instances:
-            google:
+            sample:
               - uri: https://google.com
     gateway:
       globalcors:
@@ -73,23 +71,6 @@ spring:
   redis:
     host:
     port:
-  sleuth:
-    traceId128: true
-    otel:
-      config:
-        traceIdRatioBased: 1
-      exporter:
-        jaeger:
-          endpoint:
-
-management:
-  endpoint:
-    health:
-      showDetails: ALWAYS
-  endpoints:
-    web:
-      exposure:
-        include: health, gateway, prometheus
 
 server:
   error:
@@ -104,3 +85,18 @@ server:
     keyStoreType: PKCS12
     keyStore: classpath:ssl/keystore.p12
     keyStorePassword: spring-boot
+
+management:
+  endpoint:
+    health:
+      showDetails: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: health, gateway, prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint:

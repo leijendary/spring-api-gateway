@@ -4,6 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties(prefix = "auth")
 class AuthProperties {
-    var audience: String = ""
+    var audiences: List<String> = emptyList()
     var jwkSetUri: String = ""
 }

@@ -13,10 +13,11 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder.withJwkSetUri
 class SecurityConfiguration(private val authProperties: AuthProperties) {
     @Bean
     fun jwtDecoder(): JwtDecoder {
-        val audience = authProperties.audience
-        val withAudience = AudienceValidator(audience)
+        val audienceValidators = authProperties
+            .audiences
+            .map { AudienceValidator(it) }
         val defaultValidator = createDefault()
-        val validator = DelegatingOAuth2TokenValidator(withAudience, defaultValidator)
+        val validator = DelegatingOAuth2TokenValidator(*audienceValidators.toTypedArray(), defaultValidator)
         val jwkSetUri = authProperties.jwkSetUri
         val jwtDecoder = withJwkSetUri(jwkSetUri).build()
         jwtDecoder.setJwtValidator(validator)

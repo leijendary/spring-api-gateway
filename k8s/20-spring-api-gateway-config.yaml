@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spring-api-gateway-config
+  namespace: gateway
+data:
+  SPRING_REDIS_HOST: redis-service.cache.svc.cluster.local
+  SPRING_REDIS_PORT: "6379"
+  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0__URI: https://spring-template-service.template.svc.cluster.local
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-service.monitoring.svc.cluster.local:9411/api/v2/spans

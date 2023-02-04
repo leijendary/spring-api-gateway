@@ -10,7 +10,7 @@ jobs:
   docker:
     name: Tag Image
     runs-on: ubuntu-latest
-    environment: production
+    environment: prod
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -20,7 +20,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - id: login-aws-ecr
+      - id: ecr
         name: Login to AWS ECR
         uses: aws-actions/amazon-ecr-login@v1
       - name: Pull Image
@@ -31,12 +31,12 @@ jobs:
         run: docker push $REPOSITORY_URL:$GITHUB_REF_NAME
       - name: Log out of AWS ECR
         if: always()
-        run: docker logout ${{ steps.login-aws-ecr.outputs.registry }}
-  deploy-production:
+        run: docker logout ${{ steps.ecr.outputs.registry }}
+  deploy:
     name: Fargate
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment: production
+      environment: prod
       image-tag: ${{ github.ref_name }}
     secrets: inherit
     needs: docker

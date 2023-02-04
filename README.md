@@ -6,21 +6,22 @@
 # Technologies Used:
 
 - Kotlin
+- Spring Boot 3
 - Spring Actuator
 - Spring Cloud Gateway
 - Spring Cloud LoadBalancer
-- Spring Cloud OpenTelemetry
-- Spring Cloud Sleuth
 - Spring Configuration Processor
 - Spring Data Redis Reactive
 - Spring Devtools
 - Spring Security OAuth2 JOSE
+- SpringDoc OpenAPI
 - Caffeine
 - Docker
 - JUnit
-- OpenAPI
-- Prometheus
 - Kubernetes
+- Micrometer Tracing
+- Prometheus
+- Zipkin
 
 # Spring API Gateway Template
 

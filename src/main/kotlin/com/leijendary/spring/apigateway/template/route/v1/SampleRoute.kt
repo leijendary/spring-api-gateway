@@ -1,4 +1,4 @@
-package com.leijendary.spring.apigateway.template.core.config
+package com.leijendary.spring.apigateway.template.route.v1
 
 import com.leijendary.spring.apigateway.template.core.extension.authenticated
 import com.leijendary.spring.apigateway.template.core.extension.defaultFilters
@@ -11,9 +11,9 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod.*
 
 @Configuration
-class RouteConfiguration {
+class SampleRoute {
     @Bean
-    fun routes(builder: RouteLocatorBuilder): RouteLocator = RouteLocatorDsl(builder).apply {
+    fun sampleRouteV1(builder: RouteLocatorBuilder): RouteLocator = RouteLocatorDsl(builder).apply {
         route("sample-list-v1") {
             uri("lb://sample")
             path("/api/v1/samples")

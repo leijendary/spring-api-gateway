@@ -1,12 +1,10 @@
 package com.leijendary.spring.apigateway.template.core.error
 
-import com.leijendary.spring.apigateway.template.core.data.ErrorData
-import com.leijendary.spring.apigateway.template.core.data.ErrorResponse
-import com.leijendary.spring.apigateway.template.core.data.ErrorResponse.ErrorResponseBuilder
 import com.leijendary.spring.apigateway.template.core.exception.ErrorDataException
 import com.leijendary.spring.apigateway.template.core.extension.AnyExtension.toJson
 import com.leijendary.spring.apigateway.template.core.extension.fullPath
 import com.leijendary.spring.apigateway.template.core.extension.logger
+import com.leijendary.spring.apigateway.template.core.model.ErrorModel
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale
@@ -26,68 +24,70 @@ import java.nio.charset.StandardCharsets.UTF_8
  * DefaultErrorWebExceptionHandler which has an order of -1
  */
 @Component
-@Order(-2)
+@Order
 class GlobalExceptionHandler(private val messageSource: MessageSource) : ErrorWebExceptionHandler {
     private val log = logger()
     private val genericErrorData = errorData(listOf("server", "internal"), "error.generic")
 
     override fun handle(exchange: ServerWebExchange, exception: Throwable): Mono<Void> {
-        val error = buildErrorResponse(exchange, exception)
-        val json = error.toJson()
+        val (errors, status) = buildErrorResponse(exchange, exception)
         val response = exchange.response
         response.headers.contentType = APPLICATION_JSON
-        response.rawStatusCode = error.meta["status"] as Int
+        response.rawStatusCode = status
 
+        val json = errors.toJson()
         val dataBuffer = response.bufferFactory().wrap(json?.toByteArray(UTF_8) ?: byteArrayOf(0))
 
         return response.writeWith(just(dataBuffer))
     }
 
-    private fun buildErrorResponse(exchange: ServerWebExchange, exception: Throwable): ErrorResponse {
-        val builder = ErrorResponse.builder(exchange.request.uri)
+    private fun buildErrorResponse(exchange: ServerWebExchange, exception: Throwable): Pair<List<ErrorModel>, Int> {
+        val errors = mutableListOf<ErrorModel>()
+        var status = INTERNAL_SERVER_ERROR.value()
 
-        return when (exception) {
+        when (exception) {
             is ErrorDataException -> {
-                builder
-                    .addErrors(exception.errors)
-                    .status(exception.status.value())
+                errors.addAll(exception.errors)
+                status = exception.status.value()
             }
+
             is ResponseStatusException -> {
-                statusResponse(exchange.request, exception, builder)
+                statusResponse(exchange.request, exception, errors)
+                status = exception.statusCode.value()
             }
+
             else -> {
                 log.error("Generic error handling", exception)
 
-                builder
-                    .addErrors(listOf(genericErrorData))
-                    .status(INTERNAL_SERVER_ERROR.value())
+                errors.add(genericErrorData)
             }
-        }.build()
+        }
+
+        return errors to status
     }
 
     private fun statusResponse(
         request: ServerHttpRequest,
         exception: ResponseStatusException,
-        builder: ErrorResponseBuilder
-    ): ErrorResponseBuilder {
-        return when (exception.status) {
+        errors: MutableList<ErrorModel>
+    ) {
+        val error = when (exception.statusCode) {
             NOT_FOUND -> errorData(
                 listOf("request", "path"),
                 "error.mapping.notFound",
                 arrayOf(request.uri.fullPath())
             )
+
             GATEWAY_TIMEOUT -> errorData(listOf("request"), "error.gateway.timeout")
             else -> genericErrorData
-        }.let {
-            builder
-                .addErrors(listOf(it))
-                .status(exception.rawStatusCode)
         }
+
+        errors.add(error)
     }
 
-    private fun errorData(source: List<Any>, code: String, args: Array<Any> = emptyArray()): ErrorData {
+    private fun errorData(source: List<Any>, code: String, args: Array<Any> = emptyArray()): ErrorModel {
         val message = messageSource.getMessage(code, args, getLocale())
 
-        return ErrorData(source, code, message)
+        return ErrorModel(source, code, message)
     }
 }
