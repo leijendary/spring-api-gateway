@@ -1,6 +1,6 @@
 package com.leijendary.spring.apigateway.template.core.error
 
-import com.leijendary.spring.apigateway.template.core.exception.ErrorDataException
+import com.leijendary.spring.apigateway.template.core.exception.ErrorModelException
 import com.leijendary.spring.apigateway.template.core.extension.AnyExtension.toJson
 import com.leijendary.spring.apigateway.template.core.extension.fullPath
 import com.leijendary.spring.apigateway.template.core.extension.logger
@@ -46,7 +46,7 @@ class GlobalExceptionHandler(private val messageSource: MessageSource) : ErrorWe
         var status = INTERNAL_SERVER_ERROR.value()
 
         when (exception) {
-            is ErrorDataException -> {
+            is ErrorModelException -> {
                 errors.addAll(exception.errors)
                 status = exception.status.value()
             }
