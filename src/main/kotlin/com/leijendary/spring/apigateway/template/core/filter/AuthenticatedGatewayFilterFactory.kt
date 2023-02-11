@@ -9,12 +9,13 @@ import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale
+import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.stereotype.Component
 
+const val HEADER_USER_ID = "X-User-ID"
 const val PREFIX_BEARER = "Bearer "
-const val HEADER_AUTHORIZATION = "Authorization"
 
 @Component
 class AuthenticatedGatewayFilterFactory(
@@ -28,7 +29,7 @@ class AuthenticatedGatewayFilterFactory(
     }
 
     override fun apply(config: Config) = GatewayFilter { exchange, chain ->
-        val token = exchange.request.headers[HEADER_AUTHORIZATION]
+        val token = exchange.request.headers[AUTHORIZATION]
             ?.first()
             ?.replaceFirst(PREFIX_BEARER, "")
             ?: throw unauthorizedException()
@@ -54,7 +55,16 @@ class AuthenticatedGatewayFilterFactory(
             checkScope(scope, config.scopes)
         }
 
-        chain.filter(exchange)
+        val subject = jwt.subject
+        val request = exchange.request
+            .mutate()
+            .headers {
+                it.remove(AUTHORIZATION)
+                it[HEADER_USER_ID] = subject
+            }
+            .build()
+
+        chain.filter(exchange.mutate().request(request).build())
     }
 
     override fun getConfigClass(): Class<Config> = Config::class.java
