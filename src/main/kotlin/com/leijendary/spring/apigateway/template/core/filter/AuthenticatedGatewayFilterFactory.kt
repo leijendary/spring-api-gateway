@@ -47,9 +47,12 @@ class AuthenticatedGatewayFilterFactory(
         }
 
         val claims = jwt.claims
-        val scope = claims["scope"].toString()
 
-        checkScope(scope, config.scopes)
+        if (config.scopes.isNotEmpty()) {
+            val scope = claims["scope"].toString()
+
+            checkScope(scope, config.scopes)
+        }
 
         chain.filter(exchange)
     }

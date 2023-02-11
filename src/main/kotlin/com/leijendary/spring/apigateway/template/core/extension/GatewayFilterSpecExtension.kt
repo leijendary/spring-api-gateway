@@ -38,6 +38,6 @@ fun GatewayFilterSpec.defaultFilters(filterSpecs: () -> GatewayFilterSpec) {
     dedupeResponseHeader(HEADER_TRACE_ID, RETAIN_FIRST.name)
 }
 
-fun GatewayFilterSpec.authenticated(vararg scopes: String): GatewayFilterSpec {
+fun GatewayFilterSpec.authenticated(vararg scopes: String = emptyArray()): GatewayFilterSpec {
     return filter(authenticatedGatewayFilterFactory.apply { it.scopes = scopes.toSet() })
 }
