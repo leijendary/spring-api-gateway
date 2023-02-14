@@ -30,6 +30,8 @@ dependencies {
     // Spring Boot Starter
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
+
+    // Spring Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // Spring Security
