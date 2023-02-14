@@ -51,16 +51,16 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     // Tracing
-    implementation(platform("io.micrometer:micrometer-tracing-bom:1.0.1"))
-    implementation("io.micrometer:micrometer-observation")
-    implementation("io.micrometer:micrometer-tracing-bridge-brave")
-    implementation("io.micrometer:micrometer-registry-prometheus")
-    implementation("io.zipkin.reporter2:zipkin-reporter-brave")
     implementation("com.github.loki4j:loki-logback-appender:1.4.0-m1")
+    implementation("io.micrometer:micrometer-observation")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 }
 
 dependencyManagement {
     imports {
+        mavenBom("io.micrometer:micrometer-tracing-bom:1.0.1")
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
     }
 }
