@@ -65,33 +65,35 @@ dependencyManagement {
     }
 }
 
-tasks.compileKotlin {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-        jvmTarget = "17"
+tasks {
+    compileKotlin {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
+            jvmTarget = "17"
+        }
     }
-}
 
-tasks.bootJar {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
+    bootJar {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
 
-tasks.jar {
-    enabled = false
-}
+    jar {
+        enabled = false
+    }
 
-tasks.test {
-    jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods")
-    useJUnitPlatform()
-    finalizedBy(tasks.jacocoTestReport)
-}
+    test {
+        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods")
+        useJUnitPlatform()
+        finalizedBy(jacocoTestReport)
+    }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-}
+    jacocoTestReport {
+        dependsOn(test)
+    }
 
-tasks.processResources {
-    filesMatching("application.yaml") {
-        expand(project.properties)
+    processResources {
+        filesMatching("application.yaml") {
+            expand(project.properties)
+        }
     }
 }
