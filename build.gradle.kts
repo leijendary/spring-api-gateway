@@ -2,19 +2,22 @@ plugins {
     id("org.springframework.boot") version "3.0.2"
     id("io.spring.dependency-management") version "1.1.0"
     id("org.barfuin.gradle.jacocolog") version "2.0.0"
-    kotlin("jvm") version "1.7.22"
-    kotlin("kapt") version "1.7.22"
-    kotlin("plugin.spring") version "1.7.22"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.spring") version "1.8.10"
 }
 
 group = "com.leijendary.spring"
 version = "1.0.0"
 description = "Spring Boot API Gateway Template for the Microservice Architecture or general purpose"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_19
 
 configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
+    }
+    testCompileOnly {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+        exclude(module = "mockito-core")
     }
 }
 
@@ -26,6 +29,10 @@ dependencies {
     // Kotlin
     implementation(kotlin("reflect"))
     implementation(kotlin("stdlib-jdk8"))
+    testImplementation(kotlin("test"))
+
+    // Kotlinx
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
     // Spring Boot Starter
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -50,7 +57,10 @@ dependencies {
 
     // Devtools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    kapt("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // Test
+    testImplementation("com.ninja-squad:springmockk:4.0.0")
 
     // Tracing
     implementation("com.github.loki4j:loki-logback-appender:1.4.0-m1")
@@ -70,9 +80,13 @@ dependencyManagement {
 tasks {
     compileKotlin {
         kotlinOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-            jvmTarget = "17"
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all", "-Xjvm-enable-preview")
+            jvmTarget = "19"
         }
+    }
+
+    compileJava {
+        options.compilerArgs.add("--enable-preview")
     }
 
     bootJar {
@@ -84,7 +98,7 @@ tasks {
     }
 
     test {
-        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods")
+        jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods", "--enable-preview")
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
     }
