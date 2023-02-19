@@ -2,8 +2,6 @@ package com.leijendary.spring.apigateway.template.core.config
 
 import com.leijendary.spring.apigateway.template.core.config.properties.AuthProperties
 import com.leijendary.spring.apigateway.template.core.security.AudienceValidator
-import io.netty.handler.ssl.SslContextBuilder
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory.INSTANCE
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -15,16 +13,16 @@ import org.springframework.web.reactive.function.client.WebClient
 import reactor.netty.http.client.HttpClient
 
 @Configuration
-class SecurityConfiguration(private val authProperties: AuthProperties) {
+class SecurityConfiguration(private val authProperties: AuthProperties, private val httpClient: HttpClient) {
     @Bean
     fun reactiveJwtDecoder(): ReactiveJwtDecoder {
-        val webClient = webClient()
         val audienceValidators = authProperties
             .audiences
             .map { AudienceValidator(it) }
         val defaultValidator = createDefault()
         val validator = DelegatingOAuth2TokenValidator(*audienceValidators.toTypedArray(), defaultValidator)
         val jwkSetUri = authProperties.jwkSetUri
+        val webClient = webClient()
         val jwtDecoder = withJwkSetUri(jwkSetUri)
             .webClient(webClient)
             .build()
@@ -33,14 +31,8 @@ class SecurityConfiguration(private val authProperties: AuthProperties) {
         return jwtDecoder
     }
 
+
     private fun webClient(): WebClient {
-        val sslContext = SslContextBuilder
-            .forClient()
-            .trustManager(INSTANCE)
-            .build()
-        val httpClient = HttpClient
-            .create()
-            .secure { it.sslContext(sslContext) }
         val connector = ReactorClientHttpConnector(httpClient)
 
         return WebClient.builder()

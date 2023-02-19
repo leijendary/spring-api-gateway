@@ -6,26 +6,28 @@ import com.leijendary.spring.apigateway.template.core.extension.logger
 import com.leijendary.spring.apigateway.template.core.filter.AuthenticatedGatewayFilterFactory.Config
 import com.leijendary.spring.apigateway.template.core.model.ErrorModel
 import org.springframework.cloud.gateway.filter.GatewayFilter
-import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
+import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale
 import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
 import org.springframework.stereotype.Component
 
 const val HEADER_USER_ID = "X-User-ID"
 const val PREFIX_BEARER = "Bearer "
+const val CLAIM_SCOPE = "scope"
 
 @Component
 class AuthenticatedGatewayFilterFactory(
     private val messageSource: MessageSource,
     private val reactiveJwtDecoder: ReactiveJwtDecoder,
-) : GatewayFilterFactory<Config> {
+) : AbstractGatewayFilterFactory<Config>(Config::class.java) {
     private val log = logger()
 
-    inner class Config {
-        var scopes: Set<String> = emptySet()
+    class Config {
+        var scope: String = ""
     }
 
     override fun apply(config: Config) = GatewayFilter { exchange, chain ->
@@ -36,15 +38,7 @@ class AuthenticatedGatewayFilterFactory(
 
         reactiveJwtDecoder
             .decode(token)
-            .doOnNext {
-                val claims = it.claims
-
-                if (config.scopes.isNotEmpty()) {
-                    val scope = claims["scope"].toString()
-
-                    checkScope(scope, config.scopes)
-                }
-            }
+            .doOnNext { checkScope(config, it) }
             .flatMap {
                 val subject = it.subject
 
@@ -65,12 +59,22 @@ class AuthenticatedGatewayFilterFactory(
             .onErrorMap { handle(it) }
     }
 
-    override fun getConfigClass(): Class<Config> = Config::class.java
+    override fun shortcutFieldOrder(): List<String> = listOf(CLAIM_SCOPE)
 
-    override fun newConfig(): Config = Config()
+    private fun checkScope(config: Config, jwt: Jwt) {
+        // Passed scope is empty. No need to validate
+        if (config.scope.isBlank()) {
+            return
+        }
 
-    private fun checkScope(scope: String, scopes: Set<String>) {
-        val hasScope = scope.split(" ").any { it in scopes }
+        val jwtScopes = jwt.claims[CLAIM_SCOPE]
+            .toString()
+            .split(" ")
+        val configScopes = config.scope
+            .split(" ")
+            .map { it.trim() }
+            .toSet()
+        val hasScope = jwtScopes.any { it in configScopes }
 
         if (!hasScope) {
             throw accessDeniedException()

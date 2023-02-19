@@ -19,16 +19,6 @@ auth:
   audiences:
   jwkSetUri:
 
-retry:
-  retries: 3
-  backoff:
-    firstBackoff: 5
-    maxBackoff: 20
-    factor: 2
-
-request:
-  maxSize: 100MB
-
 spring:
   application:
     name: \${info.app.name}
@@ -46,6 +36,24 @@ spring:
             sample:
               - uri:
     gateway:
+      defaultFilters:
+        - SecureHeaders
+        - name: RequestRateLimiter
+          args:
+            keyResolver: "#{@remoteAddressKeyResolver}"
+        - name: RequestSize
+          args:
+            maxSize: 100MB
+        - name: Retry
+          args:
+            statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE
+            retries: 3
+            backoff:
+              firstBackoff: 5ms
+              maxBackoff: 20ms
+              factor: 1
+              basedOnPreviousValue: true
+        - DedupeResponseHeader=X-Trace-ID
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -69,6 +77,260 @@ spring:
             replenishRate: 10
             burstCapacity: 20
             requestedTokens: 1
+      routes:
+        # Token
+        - id: token-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/token
+            - Method=POST
+        - id: token-refresh-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/token/refresh
+            - Method=POST
+        - id: token-revoke-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/token
+            - Method=DELETE
+
+        # Register Customer
+        - id: register-customer-mobile-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/register/customer/mobile
+            - Method=POST
+        - id: register-customer-email-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/register/customer/email
+            - Method=POST
+        - id: register-customer-full-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/register/customer/full
+            - Method=POST
+
+        # Register Verify
+        - id: register-verify-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/register/verify
+            - Method=POST
+
+        # Password
+        - id: password-reset-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/reset
+            - Method=POST
+        - id: password-reset-verify-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/reset/verify
+            - Method=POST
+        - id: password-nominate-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/nominate
+            - Method=POST
+
+        # Profile
+        - id: profile-get-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/profile
+            - Method=GET
+          filters:
+            - Authenticated
+        - id: profile-update-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/profile
+            - Method=PUT
+          filters:
+            - Authenticated
+
+        # Role
+        - id: role-list-v1
+          uri: lb://iam
+          order: 1
+          predicates:
+            - Path=/api/v1/roles
+            - Method=GET
+          filters:
+            - Authenticated=urn:role:list:v1
+        - id: role-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles
+            - Method=POST
+          filters:
+            - Authenticated=urn:role:create:v1
+        - id: role-get-v1
+          uri: lb://iam
+          order: 0
+          predicates:
+            - Path=/api/v1/roles/{id}
+            - Method=GET
+          filters:
+            - Authenticated=urn:role:get:v1
+        - id: role-update-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles/{id}
+            - Method=PUT
+          filters:
+            - Authenticated=urn:role:update:v1
+        - id: role-delete-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles
+            - Method=DELETE
+          filters:
+            - Authenticated=urn:role:delete:v1
+
+        # Role Permission
+        - id: role-permission-list-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles/{roleId}/permissions
+            - Method=GET
+          filters:
+            - Authenticated=urn:role:permission:list:v1
+        - id: role-permission-add-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles/{roleId}/permissions
+            - Method=POST
+          filters:
+            - Authenticated=urn:role:permission:add:v1
+        - id: role-permission-remove-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/roles/{roleId}/permissions/{id}
+            - Method=DELETE
+          filters:
+            - Authenticated=urn:role:permission:remove:v1
+
+        # Permission
+        - id: permission-list-v1
+          uri: lb://iam
+          order: 1
+          predicates:
+            - Path=/api/v1/permissions
+            - Method=GET
+          filters:
+            - Authenticated=urn:permission:list:v1
+        - id: permission-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/permissions
+            - Method=POST
+          filters:
+            - Authenticated=urn:permission:create:v1
+        - id: permission-get-v1
+          uri: lb://iam
+          order: 0
+          predicates:
+            - Path=/api/v1/permissions/{id}
+            - Method=GET
+          filters:
+            - Authenticated=urn:permission:get:v1
+        - id: permission-update-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/permissions/{id}
+            - Method=PUT
+          filters:
+            - Authenticated=urn:permission:update:v1
+        - id: permission-delete-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/permissions
+            - Method=DELETE
+          filters:
+            - Authenticated=urn:permission:delete:v1
+
+        # User
+        - id: user-list-v1
+          uri: lb://iam
+          order: 1
+          predicates:
+            - Path=/api/v1/users
+            - Method=GET
+          filters:
+            - Authenticated=urn:user:list:v1
+        - id: user-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/users
+            - Method=POST
+          filters:
+            - Authenticated=urn:user:create:v1
+        - id: user-get-v1
+          uri: lb://iam
+          order: 0
+          predicates:
+            - Path=/api/v1/users/{id}
+            - Method=GET
+          filters:
+            - Authenticated=urn:user:get:v1
+        - id: user-update-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/users/{id}
+            - Method=PUT
+          filters:
+            - Authenticated=urn:user:update:v1
+        - id: user-delete-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/users
+            - Method=DELETE
+          filters:
+            - Authenticated=urn:user:delete:v1
+
+        # Sample
+        - id: sample-list-v1
+          uri: lb://sample
+          order: 1
+          predicates:
+            - Path=/api/v1/samples
+            - Method=GET
+          filters:
+            - Authenticated=urn:sample:list:v1
+        - id: sample-create-v1
+          uri: lb://sample
+          predicates:
+            - Path=/api/v1/samples
+            - Method=POST
+          filters:
+            - Authenticated=urn:sample:create:v1
+        - id: sample-get-v1
+          uri: lb://sample
+          order: 0
+          predicates:
+            - Path=/api/v1/samples/{id}
+            - Method=GET
+          filters:
+            - Authenticated=urn:sample:get:v1
+        - id: sample-update-v1
+          uri: lb://sample
+          predicates:
+            - Path=/api/v1/samples/{id}
+            - Method=PUT
+          filters:
+            - Authenticated=urn:sample:update:v1
+        - id: sample-delete-v1
+          uri: lb://sample
+          predicates:
+            - Path=/api/v1/samples
+            - Method=DELETE
+          filters:
+            - Authenticated=urn:sample:delete:v1
+
     serviceRegistry:
       autoRegistration:
         enabled: false
