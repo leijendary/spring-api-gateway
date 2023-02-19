@@ -13,7 +13,7 @@ import org.springframework.http.HttpMethod.*
 @Configuration
 class SampleRoute {
     @Bean
-    fun sampleRouteV1(builder: RouteLocatorBuilder): RouteLocator = RouteLocatorDsl(builder).apply {
+    fun sampleRoute(builder: RouteLocatorBuilder): RouteLocator = RouteLocatorDsl(builder).apply {
         route("sample-list-v1") {
             uri("lb://sample")
             path("/api/v1/samples")
