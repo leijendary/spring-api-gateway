@@ -10,8 +10,8 @@ import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale
 import org.springframework.http.HttpHeaders.AUTHORIZATION
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.oauth2.jwt.JwtException
+import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
 import org.springframework.stereotype.Component
 
 const val HEADER_USER_ID = "X-User-ID"
@@ -20,7 +20,7 @@ const val PREFIX_BEARER = "Bearer "
 @Component
 class AuthenticatedGatewayFilterFactory(
     private val messageSource: MessageSource,
-    private val jwtDecoder: JwtDecoder
+    private val reactiveJwtDecoder: ReactiveJwtDecoder,
 ) : GatewayFilterFactory<Config> {
     private val log = logger()
 
@@ -33,38 +33,36 @@ class AuthenticatedGatewayFilterFactory(
             ?.first()
             ?.replaceFirst(PREFIX_BEARER, "")
             ?: throw unauthorizedException()
-        val jwt = try {
-            jwtDecoder.decode(token)
-        } catch (e: JwtException) {
-            val message = e.message
 
-            log.warn(message)
+        reactiveJwtDecoder
+            .decode(token)
+            .doOnNext {
+                val claims = it.claims
 
-            if (message!!.contains("expired")) {
-                throw expiredTokenException()
+                if (config.scopes.isNotEmpty()) {
+                    val scope = claims["scope"].toString()
+
+                    checkScope(scope, config.scopes)
+                }
             }
+            .flatMap {
+                val subject = it.subject
 
-            throw invalidTokenException()
-        }
+                val request = exchange
+                    .request
+                    .mutate()
+                    .headers { headers ->
+                        headers.remove(AUTHORIZATION)
+                        headers[HEADER_USER_ID] = subject
+                    }
+                    .build()
+                    .let { req ->
+                        exchange.mutate().request(req).build()
+                    }
 
-        val claims = jwt.claims
-
-        if (config.scopes.isNotEmpty()) {
-            val scope = claims["scope"].toString()
-
-            checkScope(scope, config.scopes)
-        }
-
-        val subject = jwt.subject
-        val request = exchange.request
-            .mutate()
-            .headers {
-                it.remove(AUTHORIZATION)
-                it[HEADER_USER_ID] = subject
+                chain.filter(request)
             }
-            .build()
-
-        chain.filter(exchange.mutate().request(request).build())
+            .onErrorMap { handle(it) }
     }
 
     override fun getConfigClass(): Class<Config> = Config::class.java
@@ -77,6 +75,22 @@ class AuthenticatedGatewayFilterFactory(
         if (!hasScope) {
             throw accessDeniedException()
         }
+    }
+
+    private fun handle(it: Throwable) = when (it) {
+        is JwtException -> {
+            val message = it.message!!
+
+            log.warn(message)
+
+            if (message.contains("expired")) {
+                throw expiredTokenException()
+            }
+
+            throw invalidTokenException()
+        }
+
+        else -> it
     }
 
     private fun unauthorizedException(): UnauthorizedException {

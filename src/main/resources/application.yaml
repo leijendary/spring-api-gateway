@@ -16,8 +16,8 @@ info:
       url: https://leijendary.com
 
 auth:
-  audiences: http://localhost:8080
-  jwkSetUri: https://leijendary.eu.auth0.com/.well-known/jwks.json
+  audiences:
+  jwkSetUri:
 
 retry:
   retries: 3
@@ -41,8 +41,10 @@ spring:
       client:
         simple:
           instances:
+            iam:
+              - uri:
             sample:
-              - uri: https://google.com
+              - uri:
     gateway:
       globalcors:
         corsConfigurations:
@@ -70,9 +72,10 @@ spring:
     serviceRegistry:
       autoRegistration:
         enabled: false
-  redis:
-    host:
-    port:
+  data:
+    redis:
+      host:
+      port:
 
 server:
   error:
