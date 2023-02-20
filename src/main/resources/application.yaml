@@ -135,6 +135,27 @@ spring:
           predicates:
             - Path=/api/v1/password/nominate
             - Method=POST
+        - id: password-change-initiate-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/change/initiate
+            - Method=POST
+          filters:
+            - Authenticated
+        - id: password-change-verify-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/change/verify
+            - Method=POST
+          filters:
+            - Authenticated
+        - id: password-change-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password/change
+            - Method=PUT
+          filters:
+            - Authenticated
 
         # Profile
         - id: profile-get-v1
