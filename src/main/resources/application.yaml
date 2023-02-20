@@ -96,15 +96,15 @@ spring:
             - Method=DELETE
 
         # Register Customer
-        - id: register-customer-mobile-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/register/customer/mobile
-            - Method=POST
         - id: register-customer-email-v1
           uri: lb://iam
           predicates:
             - Path=/api/v1/register/customer/email
+            - Method=POST
+        - id: register-customer-phone-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/register/customer/phone
             - Method=POST
         - id: register-customer-full-v1
           uri: lb://iam
