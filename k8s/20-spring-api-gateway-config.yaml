@@ -4,7 +4,10 @@ metadata:
   name: spring-api-gateway-config
   namespace: gateway
 data:
+  AUTH_AUDIENCES: https://localhost
+  AUTH_JWK_SET_URI: https://spring-iam-template-service.template.svc.cluster.local/api/v1/.well-known/jwks.json
   SPRING_REDIS_HOST: redis-service.cache.svc.cluster.local
   SPRING_REDIS_PORT: "6379"
-  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0__URI: https://spring-template-service.template.svc.cluster.local
+  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_IAM_0_URI: https://spring-iam-template-service.template.svc.cluster.local
+  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0_URI: https://spring-template-service.template.svc.cluster.local
   MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-service.monitoring.svc.cluster.local:9411/api/v2/spans
