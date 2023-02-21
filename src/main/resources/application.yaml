@@ -53,6 +53,7 @@ spring:
               maxBackoff: 20ms
               factor: 1
               basedOnPreviousValue: true
+        - RemoveRequestHeader=X-User-ID
         - DedupeResponseHeader=X-Trace-ID
       globalcors:
         corsConfigurations:
