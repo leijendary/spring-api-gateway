@@ -19,6 +19,17 @@ auth:
   audiences:
   jwkSetUri:
 
+request:
+  maxSize: 100MB
+
+retry:
+  retries: 3
+  backoff:
+    firstBackoff: 5ms
+    maxBackoff: 20ms
+    factor: 2
+    basedOnPreviousValue: true
+
 spring:
   application:
     name: \${info.app.name}
@@ -36,25 +47,6 @@ spring:
             sample:
               - uri:
     gateway:
-      defaultFilters:
-        - SecureHeaders
-        - name: RequestRateLimiter
-          args:
-            keyResolver: "#{@remoteAddressKeyResolver}"
-        - name: RequestSize
-          args:
-            maxSize: 100MB
-        - name: Retry
-          args:
-            statuses: BAD_GATEWAY, SERVICE_UNAVAILABLE
-            retries: 3
-            backoff:
-              firstBackoff: 5ms
-              maxBackoff: 20ms
-              factor: 1
-              basedOnPreviousValue: true
-        - RemoveRequestHeader=X-User-ID
-        - DedupeResponseHeader=X-Trace-ID
       globalcors:
         corsConfigurations:
           '[/**]':
