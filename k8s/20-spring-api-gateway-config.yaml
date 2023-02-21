@@ -10,4 +10,4 @@ data:
   SPRING_DATA_REDIS_PORT: "6379"
   SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_IAM_0_URI: https://spring-iam-template-service.template.svc.cluster.local
   SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0_URI: https://spring-template-service.template.svc.cluster.local
-  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin-service.monitoring.svc.cluster.local:9411/api/v2/spans
+  MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://jaeger-service.monitoring.svc.cluster.local:9411/api/v2/spans
