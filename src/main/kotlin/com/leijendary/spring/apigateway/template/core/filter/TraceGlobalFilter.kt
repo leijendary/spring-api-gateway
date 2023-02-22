@@ -1,8 +1,8 @@
 package com.leijendary.spring.apigateway.template.core.filter
 
+import com.leijendary.spring.apigateway.template.core.util.Tracing
 import io.micrometer.observation.Observation
 import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor
-import io.micrometer.tracing.Tracer
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
 import org.springframework.core.Ordered
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono.just
 const val HEADER_TRACE_ID = "X-Trace-ID"
 
 @Component
-class TraceFilter(private val tracer: Tracer) : GlobalFilter, Ordered {
+class TraceFilter : GlobalFilter, Ordered {
     override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
         return chain
             .filter(exchange)
@@ -25,14 +25,16 @@ class TraceFilter(private val tracer: Tracer) : GlobalFilter, Ordered {
 
     override fun getOrder() = LOWEST_PRECEDENCE
 
-    private fun trace(exchange: ServerWebExchange) = just(exchange).contextWrite {
-        val observation = it.get<Observation>(ObservationThreadLocalAccessor.KEY)
-        observation.openScope()
+    private fun trace(exchange: ServerWebExchange): Mono<ServerWebExchange> {
+        return just(exchange).contextWrite {
+            val observation = it.get<Observation>(ObservationThreadLocalAccessor.KEY)
+            observation.openScope()
 
-        val traceId = tracer.nextSpan().context().traceId()
+            val traceId = Tracing.get().traceId()
 
-        exchange.response.headers.set(HEADER_TRACE_ID, traceId)
+            exchange.response.headers.set(HEADER_TRACE_ID, traceId)
 
-        it
+            it
+        }
     }
 }
