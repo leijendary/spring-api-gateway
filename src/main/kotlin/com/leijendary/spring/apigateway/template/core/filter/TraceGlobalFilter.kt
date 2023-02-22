@@ -19,20 +19,19 @@ class TraceFilter : GlobalFilter, Ordered {
     override fun filter(exchange: ServerWebExchange, chain: GatewayFilterChain): Mono<Void> {
         return chain
             .filter(exchange)
-            .then(trace(exchange))
+            .then(just(exchange))
+            .contextWrite {
+                val observation = it.get<Observation>(ObservationThreadLocalAccessor.KEY)
+                observation.openScope()
+
+                val traceId = Tracing.get().traceId()
+
+                exchange.response.headers.set(HEADER_TRACE_ID, traceId)
+
+                it
+            }
             .then()
     }
 
     override fun getOrder() = LOWEST_PRECEDENCE
-
-    private fun trace(exchange: ServerWebExchange) = just(exchange).contextWrite {
-        val observation = it.get<Observation>(ObservationThreadLocalAccessor.KEY)
-        observation.openScope()
-
-        val traceId = Tracing.get().traceId()
-
-        exchange.response.headers.set(HEADER_TRACE_ID, traceId)
-
-        it
-    }
 }
