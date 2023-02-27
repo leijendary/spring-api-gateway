@@ -15,6 +15,6 @@ jobs:
       - name: Execute Gradle Test
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: test --info --build-cache
+          arguments: test --info
         env:
           SPRING_PROFILES_ACTIVE: ci
