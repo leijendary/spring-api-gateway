@@ -108,6 +108,11 @@ tasks {
         jvmArgs = listOf("-XX:+AllowRedefinitionToAddDeleteMethods", "--enable-preview")
         useJUnitPlatform()
         finalizedBy(jacocoTestReport)
+        extensions.configure(typeOf<JacocoTaskExtension>()) {
+            appendParallelSafeAction {
+                enabled = true
+            }
+        }
     }
 
     jacocoTestReport {
