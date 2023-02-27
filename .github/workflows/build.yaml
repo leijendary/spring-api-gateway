@@ -30,12 +30,11 @@ jobs:
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{ github.event.repository.name }}
-          DOCKER_BUILDKIT: 1
         with:
           context: .
           platforms: linux/arm64
-          build-args: BUILDKIT_INLINE_CACHE=1
-          cache-from: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           tags: |
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
             ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
