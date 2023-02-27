@@ -1,3 +1,14 @@
 auth:
   audiences: https://localhost
-  jwkSetUri: https://localhost:444
+  jwkSetUri: https://localhost:444/api/v1/.well-known/jwks.json
+
+spring:
+  cloud:
+    discovery:
+      client:
+        simple:
+          instances:
+            iam:
+              - uri: https://localhost:444
+            sample:
+              - uri: https://localhost:445
