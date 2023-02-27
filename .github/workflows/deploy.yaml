@@ -32,6 +32,8 @@ jobs:
       - name: Deploy AWS CDK
         env:
           ENVIRONMENT: ${{ inputs.environment }}
+          STACK_ID: ${{ vars.STACK_ID }}
+          STACK_NAME: ${{ github.event.repository.name }}
           IMAGE_TAG: ${{ inputs.image-tag }}
         working-directory: ./aws
         run: |
