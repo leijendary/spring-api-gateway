@@ -1,0 +1,3 @@
+auth:
+  audiences: https://localhost
+  jwkSetUri: https://localhost:444
