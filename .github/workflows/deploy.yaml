@@ -38,4 +38,4 @@ jobs:
         working-directory: ./aws
         run: |
           npm ci
-          cdk deploy
+          npm run cdk deploy

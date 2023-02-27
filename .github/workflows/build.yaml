@@ -35,7 +35,5 @@ jobs:
           platforms: linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
-            ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:latest
+          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ github.sha }}
           push: true
