@@ -43,5 +43,8 @@ out/
 ### Logs ###
 *.log
 
+### jenv ###
+.java-version
+
 ### CDK ###
 !aws/bin/
