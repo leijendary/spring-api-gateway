@@ -1,8 +1,14 @@
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2

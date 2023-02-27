@@ -11,7 +11,6 @@ jobs:
   build:
     name: Docker Image
     uses: ./.github/workflows/build.yaml
-    environment: test
     secrets: inherit
     needs: test
   deploy:
