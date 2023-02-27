@@ -68,12 +68,19 @@ dependencies {
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
+
+    // Test
+    testImplementation("com.ninja-squad:springmockk:4.0.0")
+
+    // Test Containers
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 dependencyManagement {
     imports {
         mavenBom("io.micrometer:micrometer-tracing-bom:1.0.1")
         mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
+        mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
     }
 }
 

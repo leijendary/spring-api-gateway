@@ -18,12 +18,3 @@ jobs:
           arguments: test --info
         env:
           SPRING_PROFILES_ACTIVE: ci
-    services:
-      redis:
-        image: redis:6-alpine
-        ports:
-          - 6379:6379
-      zipkin:
-        image: openzipkin/zipkin:2
-        ports:
-          - 9411:9411
