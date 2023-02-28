@@ -1,7 +1,12 @@
 import { Duration } from "aws-cdk-lib";
-import { SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
+import { IVpc, SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Cluster, FargateService, FargateServiceProps, Protocol, TaskDefinition } from "aws-cdk-lib/aws-ecs";
-import { ApplicationListener, ApplicationProtocol, ListenerCondition } from "aws-cdk-lib/aws-elasticloadbalancingv2";
+import {
+  ApplicationListener,
+  ApplicationProtocol,
+  ApplicationTargetGroup,
+  ListenerCondition,
+} from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
 
 type FargateServiceConstructProps = {
@@ -54,7 +59,7 @@ export class FargateServiceConstruct extends FargateService {
     super(scope, constructId, config);
 
     this.setScaling();
-    this.setTarget(scope, listenerArn);
+    this.setTarget(scope, vpc, listenerArn);
   }
 
   private setScaling() {
@@ -72,7 +77,7 @@ export class FargateServiceConstruct extends FargateService {
     });
   }
 
-  private setTarget(scope: Construct, listenerArn: string) {
+  private setTarget(scope: Construct, vpc: IVpc, listenerArn: string) {
     const groupId = `${id}TargetGroup-${environment}`;
     const groupName = `${id}-tg-${environment}`;
     const target = this.loadBalancerTarget({
@@ -80,18 +85,23 @@ export class FargateServiceConstruct extends FargateService {
       containerPort: 443,
       protocol: Protocol.TCP,
     });
-
-    const listener = ApplicationListener.fromLookup(scope, listenerId, { listenerArn });
-    listener.addTargets(groupId, {
+    const targetGroup = new ApplicationTargetGroup(scope, groupId, {
+      vpc,
+      targets: [target],
       targetGroupName: groupName,
       protocol: ApplicationProtocol.HTTPS,
-      priority: 1,
-      targets: [target],
-      conditions: [ListenerCondition.pathPatterns([`${path}/*`])],
+      port: 443,
       healthCheck: {
         enabled: true,
         path: `${path}/actuator/health`,
       },
+    });
+
+    const listener = ApplicationListener.fromLookup(scope, listenerId, { listenerArn });
+    listener.addTargetGroups(groupId, {
+      targetGroups: [targetGroup],
+      conditions: [ListenerCondition.pathPatterns([`${path}/*`])],
+      priority: 1,
     });
   }
 }
