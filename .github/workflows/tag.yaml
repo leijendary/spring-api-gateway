@@ -8,8 +8,11 @@ jobs:
     name: Tag Image
     runs-on: ubuntu-latest
     environment: dev
-
     steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
       - name: Checkout
         uses: actions/checkout@v3
       - name: Configure AWS Credentials
