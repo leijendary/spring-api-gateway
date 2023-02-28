@@ -32,7 +32,7 @@ jobs:
     name: Fargate
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment: prod
+      environment: dev
       image-tag: ${{ github.ref_name }}
     secrets: inherit
     needs: docker
