@@ -11,7 +11,7 @@ jobs:
       environment: dev
     secrets: inherit
   build:
-    name: Docker Image
+    name: Docker
     uses: ./.github/workflows/build.yaml
     with:
       environment: dev
