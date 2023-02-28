@@ -30,7 +30,7 @@ export class FargateServiceConstruct extends FargateService {
     const securityGroup = SecurityGroup.fromLookupByName(
       scope,
       `${id}SecurityGroup-${environment}`,
-      `api-sg-${environment}`,
+      `api-loadbalancer-sg-${environment}`,
       vpc
     );
     const cluster = Cluster.fromClusterAttributes(scope, `${id}Cluster-${environment}`, {
@@ -77,7 +77,7 @@ export class FargateServiceConstruct extends FargateService {
 
   private setTarget(scope: Construct, vpc: IVpc, listenerArn: string) {
     const groupId = `${id}TargetGroup-${environment}`;
-    const groupName = `${id}-tg-${environment}`;
+    const groupName = `${name}-tg-${environment}`;
     const target = this.loadBalancerTarget({
       containerName: name,
       containerPort: 443,
