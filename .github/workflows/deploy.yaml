@@ -38,4 +38,4 @@ jobs:
         working-directory: ./aws
         run: |
           npm ci
-          npm run cdk deploy --require-approval never
+          npm run cdk deploy -- --require-approval never
