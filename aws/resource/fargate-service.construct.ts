@@ -77,7 +77,9 @@ export class FargateServiceConstruct extends FargateService {
 
   private setTarget(scope: Construct, vpc: IVpc, listenerArn: string) {
     const groupId = `${id}TargetGroup-${environment}`;
-    const groupName = `${name}-tg-${environment}`;
+    let groupName = `${name}-tg-${environment}`;
+    groupName = groupName.slice(groupName.length - 32, groupName.length);
+
     const target = this.loadBalancerTarget({
       containerName: name,
       containerPort: 443,
