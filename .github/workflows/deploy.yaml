@@ -35,6 +35,8 @@ jobs:
           ENVIRONMENT: ${{ inputs.environment }}
           STACK_ID: ${{ vars.STACK_ID }}
           STACK_NAME: ${{ github.event.repository.name }}
+          VPC_ID: ${{ vars.VPC_ID }}
+          ELB_LISTENER_PATH: ${{ vars.ELB_LISTENER_PATH }}
           IMAGE_TAG: ${{ inputs.image-tag }}
         working-directory: ./aws
         run: |
