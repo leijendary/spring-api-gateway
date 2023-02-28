@@ -13,7 +13,7 @@ import {
 import { PolicyDocument, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
-import env from "../env";
+import env, { isProd } from "../env";
 
 type TaskDefinitionConstructProps = {
   repositoryArn: string;
@@ -30,8 +30,8 @@ const logPrefix = "/ecs/fargate";
 export class TaskDefinitionConstruct extends TaskDefinition {
   constructor(scope: Construct, props: TaskDefinitionConstructProps) {
     const { repositoryArn } = props;
-    const memoryMiB = environment === "prod" ? "2 GB" : "0.5 GB";
-    const cpu = environment === "prod" ? "1 vCPU" : "0.25 vCPU";
+    const memoryMiB = isProd() ? "2 GB" : "0.5 GB";
+    const cpu = isProd() ? "1 vCPU" : "0.25 vCPU";
     const repository = Repository.fromRepositoryArn(scope, `${id}Repository-${environment}`, repositoryArn);
     const image = ContainerImage.fromEcrRepository(repository, imageTag);
     const logGroup = createLogGroup(scope);
