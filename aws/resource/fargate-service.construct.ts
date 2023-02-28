@@ -8,7 +8,7 @@ import {
   ListenerCondition,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
-import env from "../env";
+import env, { isProd } from "../env";
 
 type FargateServiceConstructProps = {
   vpcId: string;
@@ -30,7 +30,7 @@ export class FargateServiceConstruct extends FargateService {
     const securityGroup = SecurityGroup.fromLookupByName(
       scope,
       `${id}SecurityGroup-${environment}`,
-      `api-gateway-sg-${environment}`,
+      `api-gateway-${environment}`,
       vpc
     );
     const cluster = Cluster.fromClusterAttributes(scope, `${id}Cluster-${environment}`, {
@@ -45,7 +45,7 @@ export class FargateServiceConstruct extends FargateService {
       serviceName: name,
       securityGroups: [securityGroup],
       taskDefinition,
-      healthCheckGracePeriod: environment !== "prod" ? Duration.minutes(5) : undefined,
+      healthCheckGracePeriod: isProd() ? Duration.minutes(5) : undefined,
       minHealthyPercent: 100,
       maxHealthyPercent: 200,
       desiredCount: 1,
