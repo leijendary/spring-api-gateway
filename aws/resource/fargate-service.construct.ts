@@ -19,7 +19,6 @@ type FargateServiceConstructProps = {
 const environment = process.env.ENVIRONMENT!!;
 const id = process.env.STACK_ID!!;
 const name = process.env.STACK_NAME!!;
-const path = "";
 
 export class FargateServiceConstruct extends FargateService {
   constructor(scope: Construct, props: FargateServiceConstructProps) {
@@ -91,14 +90,14 @@ export class FargateServiceConstruct extends FargateService {
       port: 443,
       healthCheck: {
         enabled: true,
-        path: `${path}/actuator/health`,
+        path: "/actuator/health",
       },
     });
 
     const listener = ApplicationListener.fromLookup(scope, `${id}Listener-${environment}`, { listenerArn });
     listener.addTargetGroups(groupId, {
       targetGroups: [targetGroup],
-      conditions: [ListenerCondition.pathPatterns([`${path}/*`])],
+      conditions: [ListenerCondition.pathPatterns(["/*"])],
       priority: 1,
     });
   }
