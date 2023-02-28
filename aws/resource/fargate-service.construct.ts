@@ -86,7 +86,6 @@ export class FargateServiceConstruct extends FargateService {
       protocol: Protocol.TCP,
     });
     const targetGroup = new ApplicationTargetGroup(scope, groupId, {
-      vpc,
       targets: [target],
       targetGroupName: groupName,
       protocol: ApplicationProtocol.HTTPS,
