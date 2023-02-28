@@ -8,6 +8,7 @@ import {
   ListenerCondition,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
+import env from "../env";
 
 type FargateServiceConstructProps = {
   vpcId: string;
@@ -16,9 +17,9 @@ type FargateServiceConstructProps = {
   taskDefinition: TaskDefinition;
 };
 
-const environment = process.env.ENVIRONMENT!!;
-const id = process.env.STACK_ID!!;
-const name = process.env.STACK_NAME!!;
+const environment = env.environment;
+const id = env.stackId;
+const name = env.stackName;
 
 export class FargateServiceConstruct extends FargateService {
   constructor(scope: Construct, props: FargateServiceConstructProps) {

@@ -13,15 +13,16 @@ import {
 import { PolicyDocument, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { Construct } from "constructs";
+import env from "../env";
 
 type TaskDefinitionConstructProps = {
   repositoryArn: string;
 };
 
-const environment = process.env.ENVIRONMENT!!;
-const imageTag = process.env.IMAGE_TAG!!;
-const id = process.env.STACK_ID!!;
-const name = process.env.STACK_NAME!!;
+const environment = env.environment;
+const imageTag = env.imageTag;
+const id = env.stackId;
+const name = env.stackName;
 const family = `${name}-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";
