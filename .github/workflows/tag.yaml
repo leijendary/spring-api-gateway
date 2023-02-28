@@ -7,7 +7,7 @@ jobs:
   docker:
     name: Tag Image
     runs-on: ubuntu-latest
-    environment: dev
+    environment: prod
     steps:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -30,7 +30,7 @@ jobs:
     name: Fargate
     uses: ./.github/workflows/deploy.yaml
     with:
-      environment: dev
+      environment: prod
       image-tag: ${{ github.ref_name }}
     secrets: inherit
     needs: docker
