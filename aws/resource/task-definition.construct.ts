@@ -23,9 +23,6 @@ const imageTag = process.env.IMAGE_TAG!!;
 const id = process.env.STACK_ID!!;
 const name = process.env.STACK_NAME!!;
 const family = `${name}-${environment}`;
-const repositoryId = `${id}Repository-${environment}`;
-const constructId = `${id}TaskDefinition-${environment}`;
-const containerId = `${id}Container-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";
 
@@ -34,7 +31,7 @@ export class TaskDefinitionConstruct extends TaskDefinition {
     const { repositoryArn } = props;
     const memoryMiB = environment === "prod" ? "2 GB" : "0.5 GB";
     const cpu = environment === "prod" ? "1 vCPU" : "0.25 vCPU";
-    const repository = Repository.fromRepositoryArn(scope, repositoryId, repositoryArn);
+    const repository = Repository.fromRepositoryArn(scope, `${id}Repository-${environment}`, repositoryArn);
     const image = ContainerImage.fromEcrRepository(repository, imageTag);
     const logGroup = createLogGroup(scope);
     const taskRole = createTaskRole(scope);
@@ -52,14 +49,14 @@ export class TaskDefinitionConstruct extends TaskDefinition {
       executionRole,
     };
 
-    super(scope, constructId, config);
+    super(scope, `${id}TaskDefinition-${environment}`, config);
 
     this.container(image, logGroup);
     this.trustPolicy(taskRole, executionRole);
   }
 
   private container(image: ContainerImage, logGroup: LogGroup) {
-    this.addContainer(containerId, {
+    this.addContainer(`${id}Container-${environment}`, {
       containerName: name,
       image,
       logging: LogDriver.awsLogs({

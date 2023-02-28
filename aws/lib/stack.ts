@@ -4,8 +4,9 @@ import { FargateServiceConstruct } from "./../resource/fargate-service.construct
 import { TaskDefinitionConstruct } from "./../resource/task-definition.construct";
 
 type Config = {
-  repositoryArn: string;
+  vpcId: string;
   clusterArn: string;
+  repositoryArn: string;
   listenerArn: string;
 };
 
@@ -22,7 +23,7 @@ export class ApplicationStack extends Stack {
     super(scope, `${id}Stack-${environment}`, props);
 
     const { account, region } = props.env!!;
-    const { repositoryArn, listenerArn, clusterArn } = getConfig(account!!, region!!);
+    const { vpcId, clusterArn, repositoryArn, listenerArn } = getConfig(account!!, region!!);
     const taskDefinition = new TaskDefinitionConstruct(this, {
       ...props,
       repositoryArn,
@@ -30,9 +31,10 @@ export class ApplicationStack extends Stack {
 
     new FargateServiceConstruct(this, {
       ...props,
+      vpcId,
+      clusterArn,
       taskDefinition,
       listenerArn,
-      clusterArn,
     });
   }
 }
@@ -40,9 +42,10 @@ export class ApplicationStack extends Stack {
 const getConfig = (account: string, region: string) => {
   const configMap: ConfigMap = {
     dev: {
+      vpcId: "vpc-0540bcf99b32c65b0",
       repositoryArn: `arn:aws:ecr:${region}:${account}:repository/${name}`,
       clusterArn: `arn:aws:ecs:${region}:${account}:cluster/api-cluster-dev`,
-      listenerArn: `arn:aws:elasticloadbalancing:${region}:${account}:listener/app/api-loadbalancer-dev/00c4f3aed575b71d/01388fd3730ed00b`,
+      listenerArn: `arn:aws:elasticloadbalancing:${region}:${account}:listener/app/api-loadbalancer-dev/88e13810e5c8ed1c/b36c961d43a6f4a6`,
     },
   };
 
