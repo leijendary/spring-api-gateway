@@ -7,7 +7,7 @@ const environment = process.env.ENVIRONMENT!!;
 const id = process.env.STACK_ID!!;
 const name = process.env.STACK_NAME!!;
 const vpcId = process.env.VPC_ID!!;
-const listenerPath = process.env.ELB_LISTENER_PATH!!;
+const listenerPath = process.env.LISTENER_PATH!!;
 
 export class ApplicationStack extends Stack {
   constructor(scope: Construct, props: StackProps) {
