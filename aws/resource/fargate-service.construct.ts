@@ -30,7 +30,7 @@ export class FargateServiceConstruct extends FargateService {
     const securityGroup = SecurityGroup.fromLookupByName(
       scope,
       `${id}SecurityGroup-${environment}`,
-      `api-loadbalancer-sg-${environment}`,
+      `api-sg-${environment}`,
       vpc
     );
     const cluster = Cluster.fromClusterAttributes(scope, `${id}Cluster-${environment}`, {
