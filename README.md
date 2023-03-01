@@ -15,6 +15,7 @@
 - Spring Devtools
 - Spring Security OAuth2 JOSE
 - SpringDoc OpenAPI
+- AWS CDK
 - Caffeine
 - Docker
 - JUnit
