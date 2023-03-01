@@ -18,8 +18,7 @@ type FargateServiceConstructProps = {
 };
 
 const environment = env.environment;
-const id = env.stackId;
-const name = env.stackName;
+const { id, name } = env.stack;
 
 export class FargateServiceConstruct extends FargateService {
   constructor(scope: Construct, props: FargateServiceConstructProps) {

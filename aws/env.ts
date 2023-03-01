@@ -6,8 +6,10 @@ export default {
   account: process.env.CDK_DEFAULT_ACCOUNT!!,
   region: process.env.CDK_DEFAULT_REGION!!,
   environment,
-  stackId: process.env.STACK_ID!!,
-  stackName: process.env.STACK_NAME!!,
+  stack: {
+    id: process.env.STACK_ID!!,
+    name: process.env.STACK_NAME!!,
+  },
   vpcId: process.env.VPC_ID!!,
   listenerPath: process.env.LISTENER_PATH!!,
   imageTag: process.env.IMAGE_TAG!!,

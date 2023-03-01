@@ -21,8 +21,7 @@ type TaskDefinitionConstructProps = {
 
 const environment = env.environment;
 const imageTag = env.imageTag;
-const id = env.stackId;
-const name = env.stackName;
+const { id, name } = env.stack;
 const family = `${name}-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";

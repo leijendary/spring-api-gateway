@@ -5,8 +5,7 @@ import { FargateServiceConstruct } from "./../resource/fargate-service.construct
 import { TaskDefinitionConstruct } from "./../resource/task-definition.construct";
 
 const environment = env.environment;
-const id = env.stackId;
-const name = env.stackName;
+const { id, name } = env.stack;
 const vpcId = env.vpcId;
 const listenerPath = env.listenerPath;
 const account = env.account;
