@@ -67,14 +67,14 @@ class AuthenticatedGatewayFilterFactory(
             return
         }
 
-        val jwtScopes = jwt.claims[CLAIM_SCOPE]
-            .toString()
-            .split(" ")
         val configScopes = config.scope
             .split(" ")
             .map { it.trim() }
             .toSet()
-        val hasScope = jwtScopes.any { it in configScopes }
+        val jwtScopes = jwt.claims[CLAIM_SCOPE]
+            .toString()
+            .split(" ")
+        val hasScope = configScopes.any { it in jwtScopes }
 
         if (!hasScope) {
             throw accessDeniedException()
