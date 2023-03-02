@@ -59,9 +59,6 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    // Test
-    testImplementation("com.ninja-squad:springmockk:4.0.0")
-
     // Tracing
     implementation("com.github.loki4j:loki-logback-appender:1.4.0-m1")
     implementation("io.micrometer:micrometer-observation")
