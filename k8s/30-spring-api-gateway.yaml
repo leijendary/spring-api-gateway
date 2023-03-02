@@ -18,23 +18,21 @@ spec:
         - name: spring-api-gateway
           image: jleijendekker/spring-api-gateway:1.0.0
           ports:
-            - containerPort: 443
+            - containerPort: 80
           envFrom:
             - configMapRef:
                 name: spring-api-gateway-config
           readinessProbe:
             httpGet:
-              scheme: HTTPS
               path: /actuator/health
-              port: 443
+              port: 80
             initialDelaySeconds: 20
             timeoutSeconds: 5
             periodSeconds: 30
           livenessProbe:
             httpGet:
-              scheme: HTTPS
               path: /actuator/health
-              port: 443
+              port: 80
             initialDelaySeconds: 30
             timeoutSeconds: 5
             periodSeconds: 30
@@ -59,7 +57,7 @@ spec:
     app: spring-api-gateway
   type: LoadBalancer
   ports:
-    - name: https
+    - name: http
       protocol: TCP
-      port: 443
-      targetPort: 443
+      port: 80
+      targetPort: 80

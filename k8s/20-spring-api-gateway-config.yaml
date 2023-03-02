@@ -4,10 +4,10 @@ metadata:
   name: spring-api-gateway-config
   namespace: gateway
 data:
-  AUTH_AUDIENCES: https://localhost
-  AUTH_JWK_SET_URI: https://spring-iam-template-service.template.svc.cluster.local/api/v1/.well-known/jwks.json
+  AUTH_AUDIENCES: http://localhost
+  AUTH_JWK_SET_URI: http://spring-iam-template-service.template.svc.cluster.local/api/v1/.well-known/jwks.json
   SPRING_DATA_REDIS_HOST: redis-service.cache.svc.cluster.local
   SPRING_DATA_REDIS_PORT: "6379"
-  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_IAM_0_URI: https://spring-iam-template-service.template.svc.cluster.local
-  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0_URI: https://spring-template-service.template.svc.cluster.local
+  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_IAM_0_URI: http://spring-iam-template-service.template.svc.cluster.local
+  SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_SAMPLE_0_URI: http://spring-template-service.template.svc.cluster.local
   MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://jaeger-service.monitoring.svc.cluster.local:9411/api/v2/spans

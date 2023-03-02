@@ -1,6 +1,6 @@
 auth:
-  audiences: https://localhost
-  jwkSetUri: https://localhost:444/api/v1/.well-known/jwks.json
+  audiences: http://localhost
+  jwkSetUri: http://localhost:81/api/v1/.well-known/jwks.json
 
 spring:
   cloud:
@@ -9,6 +9,6 @@ spring:
         simple:
           instances:
             iam:
-              - uri: https://localhost:444
+              - uri: http://localhost:81
             sample:
-              - uri: https://localhost:445
+              - uri: http://localhost:82

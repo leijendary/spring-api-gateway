@@ -57,8 +57,6 @@ spring:
       httpclient:
         connectTimeout: 60000
         responseTimeout: 1m
-        ssl:
-          useInsecureTrustManager: true
         wiretap: true
       httpserver:
         wiretap: true
@@ -359,13 +357,7 @@ server:
       enabled: false
   http2:
     enabled: true
-  port: 443
-  ssl:
-    enabled: true
-    keyAlias: spring-boot
-    keyStoreType: PKCS12
-    keyStore: classpath:ssl/keystore.p12
-    keyStorePassword: spring-boot
+  port: 80
 
 management:
   endpoint:

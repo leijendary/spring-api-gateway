@@ -6,6 +6,7 @@ export default {
   account: process.env.CDK_DEFAULT_ACCOUNT!!,
   region: process.env.CDK_DEFAULT_REGION!!,
   environment,
+  port: 80,
   stack: {
     id: process.env.STACK_ID!!,
     name: process.env.STACK_NAME!!,

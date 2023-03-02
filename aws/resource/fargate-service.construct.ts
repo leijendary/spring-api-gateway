@@ -18,6 +18,7 @@ type FargateServiceConstructProps = {
 };
 
 const environment = env.environment;
+const port = env.port;
 const { id, name } = env.stack;
 
 export class FargateServiceConstruct extends FargateService {
@@ -79,15 +80,15 @@ export class FargateServiceConstruct extends FargateService {
     const groupName = `${name}-${environment}`;
     const target = this.loadBalancerTarget({
       containerName: name,
-      containerPort: 443,
+      containerPort: port,
       protocol: Protocol.TCP,
     });
     const targetGroup = new ApplicationTargetGroup(scope, groupId, {
       vpc,
       targets: [target],
       targetGroupName: groupName,
-      protocol: ApplicationProtocol.HTTPS,
-      port: 443,
+      protocol: ApplicationProtocol.HTTP,
+      port,
       healthCheck: {
         enabled: true,
         path: "/actuator/health",

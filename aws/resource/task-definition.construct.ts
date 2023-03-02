@@ -26,6 +26,8 @@ const family = `${name}-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";
 
+const port = env.port;
+
 export class TaskDefinitionConstruct extends TaskDefinition {
   constructor(scope: Construct, props: TaskDefinitionConstructProps) {
     const { repositoryArn } = props;
@@ -65,8 +67,8 @@ export class TaskDefinitionConstruct extends TaskDefinition {
       }),
       portMappings: [
         {
-          containerPort: 443,
-          hostPort: 443,
+          containerPort: port,
+          hostPort: port,
           protocol: Protocol.TCP,
         },
       ],
