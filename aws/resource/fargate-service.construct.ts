@@ -1,4 +1,3 @@
-import { Duration } from "aws-cdk-lib";
 import { IVpc, SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Cluster, FargateService, FargateServiceProps, Protocol, TaskDefinition } from "aws-cdk-lib/aws-ecs";
 import {
