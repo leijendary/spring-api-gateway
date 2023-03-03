@@ -72,6 +72,9 @@ export class TaskDefinitionConstruct extends TaskDefinition {
           protocol: Protocol.TCP,
         },
       ],
+      environment: {
+        SPRING_PROFILES_ACTIVE: environment,
+      },
     });
   }
 
