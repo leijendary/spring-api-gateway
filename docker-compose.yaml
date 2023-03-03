@@ -10,7 +10,7 @@ services:
       - redis_network
       - jaeger_network
     healthcheck:
-      test: [ "CMD-SHELL", "wget -qO- --no-check-certificate http://localhost/actuator/health || exit 1" ]
+      test: [ "CMD-SHELL", "wget -qO- http://localhost/actuator/health || exit 1" ]
     deploy:
       resources:
         reservations:
