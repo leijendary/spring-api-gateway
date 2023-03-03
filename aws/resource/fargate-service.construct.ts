@@ -8,7 +8,7 @@ import {
   ListenerCondition,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
-import env, { isProd } from "../env";
+import env from "../env";
 
 type FargateServiceConstructProps = {
   vpcId: string;
@@ -45,7 +45,6 @@ export class FargateServiceConstruct extends FargateService {
       serviceName: name,
       securityGroups: [securityGroup],
       taskDefinition,
-      healthCheckGracePeriod: isProd() ? Duration.minutes(5) : undefined,
       minHealthyPercent: 100,
       maxHealthyPercent: 200,
       desiredCount: 1,
