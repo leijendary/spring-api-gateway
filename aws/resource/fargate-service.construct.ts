@@ -1,3 +1,4 @@
+import { Duration } from "aws-cdk-lib";
 import { IVpc, SecurityGroup, Vpc } from "aws-cdk-lib/aws-ec2";
 import { Cluster, FargateService, FargateServiceProps, Protocol, TaskDefinition } from "aws-cdk-lib/aws-ecs";
 import {
@@ -7,7 +8,7 @@ import {
   ListenerCondition,
 } from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { Construct } from "constructs";
-import env from "../env";
+import env, { isProd } from "../env";
 
 type FargateServiceConstructProps = {
   vpcId: string;
@@ -44,6 +45,7 @@ export class FargateServiceConstruct extends FargateService {
       serviceName: name,
       securityGroups: [securityGroup],
       taskDefinition,
+      healthCheckGracePeriod: Duration.seconds(isProd() ? 20 : 300),
       minHealthyPercent: 100,
       maxHealthyPercent: 200,
       desiredCount: 1,
