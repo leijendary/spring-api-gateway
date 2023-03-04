@@ -69,7 +69,6 @@ export class TaskDefinitionConstruct extends TaskDefinition {
         {
           containerPort: port,
           hostPort: port,
-          protocol: Protocol.TCP,
         },
       ],
       environment: {
