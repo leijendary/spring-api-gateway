@@ -83,7 +83,7 @@ export class FargateServiceConstruct extends FargateService {
       targets: [target],
       targetGroupName: groupName,
       protocol: ApplicationProtocol.HTTP,
-      protocolVersion: ApplicationProtocolVersion.HTTP2,
+      protocolVersion: ApplicationProtocolVersion.HTTP1,
       port,
       healthCheck: {
         enabled: true,
