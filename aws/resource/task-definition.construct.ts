@@ -70,7 +70,7 @@ export class TaskDefinitionConstruct extends TaskDefinition {
           name,
           containerPort: port,
           hostPort: port,
-          appProtocol: AppProtocol.http2,
+          appProtocol: AppProtocol.http,
         },
       ],
       environment: {

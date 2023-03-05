@@ -44,19 +44,16 @@ export class FargateServiceConstruct extends FargateService {
       circuitBreaker: {
         rollback: true,
       },
-      serviceConnectConfiguration: {
-        services: [
-          {
-            portMappingName: name,
-          },
-        ],
-      },
+      serviceConnectConfiguration: {},
     };
 
     super(scope, `${id}Service-${environment}`, config);
 
-    this.setScaling();
     this.setTarget(scope, vpc, listenerArn);
+
+    if (isProd()) {
+      this.setScaling();
+    }
   }
 
   private setScaling() {
