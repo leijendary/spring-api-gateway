@@ -1,12 +1,12 @@
 import { RemovalPolicy } from "aws-cdk-lib";
 import { IRepository, Repository } from "aws-cdk-lib/aws-ecr";
 import {
+  AppProtocol,
   Compatibility,
   ContainerImage,
   CpuArchitecture,
   LogDriver,
   OperatingSystemFamily,
-  Protocol,
   TaskDefinition,
   TaskDefinitionProps,
 } from "aws-cdk-lib/aws-ecs";
@@ -67,8 +67,10 @@ export class TaskDefinitionConstruct extends TaskDefinition {
       }),
       portMappings: [
         {
+          name,
           containerPort: port,
           hostPort: port,
+          appProtocol: AppProtocol.http2,
         },
       ],
       environment: {
