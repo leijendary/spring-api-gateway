@@ -86,67 +86,36 @@ spring:
             - Path=/api/v1/token
             - Method=DELETE
 
-        # Register Customer
-        - id: register-customer-email-v1
+        # Register
+        - id: register-email-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/register/customer/email
+            - Path=/api/v1/register/email
             - Method=POST
-        - id: register-customer-phone-v1
+        - id: register-phone-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/register/customer/phone
-            - Method=POST
-        - id: register-customer-full-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/register/customer/full
-            - Method=POST
-
-        # Register Verify
-        - id: register-verify-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/register/verify
+            - Path=/api/v1/register/phone
             - Method=POST
 
         # Password
+        - id: password-nominate-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password
+            - Method=POST
+        - id: password-change-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/password
+            - Method=PUT
+          filters:
+            - Authenticated
         - id: password-reset-v1
           uri: lb://iam
           predicates:
             - Path=/api/v1/password/reset
             - Method=POST
-        - id: password-reset-verify-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/password/reset/verify
-            - Method=POST
-        - id: password-nominate-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/password/nominate
-            - Method=POST
-        - id: password-change-initiate-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/password/change/initiate
-            - Method=POST
-          filters:
-            - Authenticated
-        - id: password-change-verify-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/password/change/verify
-            - Method=POST
-          filters:
-            - Authenticated
-        - id: password-change-v1
-          uri: lb://iam
-          predicates:
-            - Path=/api/v1/password/change
-            - Method=PUT
-          filters:
-            - Authenticated
 
         # Profile
         - id: profile-get-v1
@@ -161,6 +130,20 @@ spring:
           predicates:
             - Path=/api/v1/profile
             - Method=PUT
+          filters:
+            - Authenticated
+        - id: profile-email-change-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/profile/email
+            - Method=PATCH
+          filters:
+            - Authenticated
+        - id: profile-phone-change-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/profile/phone
+            - Method=PATCH
           filters:
             - Authenticated
 
@@ -303,6 +286,13 @@ spring:
             - Method=DELETE
           filters:
             - Authenticated=urn:user:delete:v1
+
+        # Verification
+        - id: verification-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/verification
+            - Method=POST
 
         # Sample
         - id: sample-list-v1
