@@ -1,7 +1,7 @@
 package com.leijendary.spring.apigateway.template.core.config
 
 import com.leijendary.spring.apigateway.template.core.config.properties.AuthProperties
-import com.leijendary.spring.apigateway.template.core.security.AudienceValidator
+import com.leijendary.spring.apigateway.template.core.security.JwtAudienceValidator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator
@@ -13,11 +13,10 @@ import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
 class SecurityConfiguration(private val authProperties: AuthProperties) {
     @Bean
     fun reactiveJwtDecoder(): ReactiveJwtDecoder {
-        val audienceValidators = authProperties
-            .audiences
-            .map { AudienceValidator(it) }
+        val audiences = authProperties.audiences
+        val audienceValidator = JwtAudienceValidator(audiences)
         val defaultValidator = createDefault()
-        val validator = DelegatingOAuth2TokenValidator(*audienceValidators.toTypedArray(), defaultValidator)
+        val validator = DelegatingOAuth2TokenValidator(audienceValidator, defaultValidator)
         val jwkSetUri = authProperties.jwkSetUri
 
         return withJwkSetUri(jwkSetUri)
