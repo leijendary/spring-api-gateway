@@ -19,12 +19,11 @@ class SecurityConfiguration(private val authProperties: AuthProperties) {
         val defaultValidator = createDefault()
         val validator = DelegatingOAuth2TokenValidator(*audienceValidators.toTypedArray(), defaultValidator)
         val jwkSetUri = authProperties.jwkSetUri
-        val jwtDecoder = withJwkSetUri(jwkSetUri)
+
+        return withJwkSetUri(jwkSetUri)
             .build()
             .apply {
                 setJwtValidator(validator)
             }
-
-        return jwtDecoder
     }
 }
