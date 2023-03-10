@@ -4,7 +4,7 @@ metadata:
   name: spring-api-gateway-config
   namespace: gateway
 data:
-  AUTH_AUDIENCES: http://localhost
+  AUTH_AUDIENCE: http://localhost
   AUTH_JWK_SET_URI: http://spring-iam-template-service.template.svc.cluster.local/api/v1/.well-known/jwks.json
   SPRING_DATA_REDIS_HOST: redis-service.cache.svc.cluster.local
   SPRING_DATA_REDIS_PORT: "6379"

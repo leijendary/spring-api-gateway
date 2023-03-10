@@ -8,9 +8,9 @@ import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.failu
 import org.springframework.security.oauth2.core.OAuth2TokenValidatorResult.success
 import org.springframework.security.oauth2.jwt.Jwt
 
-class JwtAudienceValidator(private val audiences: List<String>) : OAuth2TokenValidator<Jwt> {
+class JwtAudienceValidator(private val audience: String) : OAuth2TokenValidator<Jwt> {
     override fun validate(jwt: Jwt): OAuth2TokenValidatorResult {
-        val hasAudience = audiences.any { it in jwt.audience }
+        val hasAudience = jwt.audience.contains(audience)
 
         if (hasAudience) {
             return success()

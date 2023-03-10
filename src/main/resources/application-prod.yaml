@@ -1,5 +1,5 @@
 auth:
-  audiences: http://leijendary.com
+  audience: http://leijendary.com
   jwkSetUri: http://authentication.leijendary.local/api/v1/.well-known/jwks.json
 
 springdoc:

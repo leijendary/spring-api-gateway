@@ -16,7 +16,7 @@ info:
       url: https://leijendary.com
 
 auth:
-  audiences:
+  audience:
   jwkSetUri:
 
 request:

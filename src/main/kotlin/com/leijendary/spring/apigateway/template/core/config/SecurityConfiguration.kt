@@ -13,8 +13,8 @@ import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
 class SecurityConfiguration(private val authProperties: AuthProperties) {
     @Bean
     fun reactiveJwtDecoder(): ReactiveJwtDecoder {
-        val audiences = authProperties.audiences
-        val audienceValidator = JwtAudienceValidator(audiences)
+        val audience = authProperties.audience
+        val audienceValidator = JwtAudienceValidator(audience)
         val defaultValidator = createDefault()
         val validator = DelegatingOAuth2TokenValidator(audienceValidator, defaultValidator)
         val jwkSetUri = authProperties.jwkSetUri
