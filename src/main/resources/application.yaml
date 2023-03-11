@@ -17,6 +17,7 @@ info:
 
 auth:
   audience:
+  issuer:
   jwkSetUri:
 
 request:
