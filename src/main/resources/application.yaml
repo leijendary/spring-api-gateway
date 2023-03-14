@@ -86,6 +86,11 @@ spring:
           predicates:
             - Path=/api/v1/token
             - Method=DELETE
+        - id: token-social-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/token/social
+            - Method=POST
 
         # Register
         - id: register-email-v1
