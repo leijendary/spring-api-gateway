@@ -187,7 +187,7 @@ spring:
         - id: address-delete-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/addresses
+            - Path=/api/v1/addresses/{id}
             - Method=DELETE
           filters:
             - Authenticated
@@ -226,7 +226,7 @@ spring:
         - id: role-delete-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/roles
+            - Path=/api/v1/roles/{id}
             - Method=DELETE
           filters:
             - Authenticated=urn:role:delete:v1
@@ -288,7 +288,7 @@ spring:
         - id: permission-delete-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/permissions
+            - Path=/api/v1/permissions/{id}
             - Method=DELETE
           filters:
             - Authenticated=urn:permission:delete:v1
@@ -327,7 +327,7 @@ spring:
         - id: user-delete-v1
           uri: lb://iam
           predicates:
-            - Path=/api/v1/users
+            - Path=/api/v1/users/{id}
             - Method=DELETE
           filters:
             - Authenticated=urn:user:delete:v1
@@ -373,7 +373,7 @@ spring:
         - id: sample-delete-v1
           uri: lb://sample
           predicates:
-            - Path=/api/v1/samples
+            - Path=/api/v1/samples/{id}
             - Method=DELETE
           filters:
             - Authenticated=urn:sample:delete:v1
