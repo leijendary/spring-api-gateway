@@ -148,6 +148,45 @@ spring:
           filters:
             - Authenticated
 
+        # Address
+        - id: address-list-v1
+          uri: lb://iam
+          order: 1
+          predicates:
+            - Path=/api/v1/addresses
+            - Method=GET
+          filters:
+            - Authenticated
+        - id: address-create-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/addresses
+            - Method=POST
+          filters:
+            - Authenticated
+        - id: address-get-v1
+          uri: lb://iam
+          order: 0
+          predicates:
+            - Path=/api/v1/addresses/{id}
+            - Method=GET
+          filters:
+            - Authenticated
+        - id: address-update-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/addresses/{id}
+            - Method=PUT
+          filters:
+            - Authenticated
+        - id: address-delete-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/addresses
+            - Method=DELETE
+          filters:
+            - Authenticated
+
         # Role
         - id: role-list-v1
           uri: lb://iam
