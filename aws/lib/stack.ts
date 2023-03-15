@@ -10,6 +10,7 @@ const vpcId = env.vpcId;
 const listenerPath = env.listenerPath;
 const account = env.account;
 const region = env.region;
+const { id: namespaceId } = env.namespace;
 
 export class ApplicationStack extends Stack {
   constructor(scope: Construct, props: StackProps) {
@@ -18,6 +19,7 @@ export class ApplicationStack extends Stack {
     const repositoryArn = `arn:aws:ecr:${region}:${account}:repository/${name}`;
     const clusterArn = `arn:aws:ecs:${region}:${account}:cluster/api-cluster-${environment}`;
     const listenerArn = `arn:aws:elasticloadbalancing:${region}:${account}:listener/${listenerPath}`;
+    const namespaceArn = `arn:aws:servicediscovery:${region}:${account}:namespace/${namespaceId}`;
     const taskDefinition = new TaskDefinitionConstruct(this, {
       ...props,
       repositoryArn,
@@ -27,8 +29,9 @@ export class ApplicationStack extends Stack {
       ...props,
       vpcId,
       clusterArn,
-      taskDefinition,
       listenerArn,
+      namespaceArn,
+      taskDefinition,
     });
   }
 }

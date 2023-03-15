@@ -16,20 +16,21 @@ type FargateServiceConstructProps = {
   vpcId: string;
   clusterArn: string;
   listenerArn: string;
+  namespaceArn: string;
   taskDefinition: TaskDefinition;
 };
 
 const environment = env.environment;
 const port = env.port;
 const { id, name } = env.stack;
-const { arn: namespaceArn, id: namespaceId, name: namespaceName } = env.namespace;
+const { id: namespaceId, name: namespaceName } = env.namespace;
 
 export class FargateServiceConstruct extends FargateService {
   constructor(scope: Construct, props: FargateServiceConstructProps) {
-    const { vpcId, clusterArn, listenerArn, taskDefinition, ...rest } = props;
+    const { vpcId, clusterArn, listenerArn, namespaceArn, taskDefinition, ...rest } = props;
     const vpc = getVpc(scope, vpcId);
     const securityGroup = getSecurityGroup(scope, vpc);
-    const namespace = getNamespace(scope);
+    const namespace = getNamespace(scope, namespaceArn);
     const cluster = getCluster(scope, clusterArn, vpc, securityGroup, namespace);
     const config: FargateServiceProps = {
       ...rest,
@@ -110,7 +111,7 @@ const getSecurityGroup = (scope: Construct, vpc: IVpc) => {
   return SecurityGroup.fromLookupByName(scope, `${id}SecurityGroup-${environment}`, `api-gateway-${environment}`, vpc);
 };
 
-const getNamespace = (scope: Construct) => {
+const getNamespace = (scope: Construct, namespaceArn: string) => {
   return PrivateDnsNamespace.fromPrivateDnsNamespaceAttributes(scope, `${id}Namespace-${environment}`, {
     namespaceArn,
     namespaceId,
