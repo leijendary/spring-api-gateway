@@ -6,6 +6,7 @@ import com.leijendary.spring.apigateway.template.core.extension.logger
 import com.leijendary.spring.apigateway.template.core.filter.AuthenticatedGatewayFilterFactory.Config
 import com.leijendary.spring.apigateway.template.core.model.ErrorModel
 import org.springframework.cloud.gateway.filter.GatewayFilter
+import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
 import org.springframework.context.MessageSource
 import org.springframework.context.i18n.LocaleContextHolder.getLocale
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
 import org.springframework.stereotype.Component
+import org.springframework.web.server.ServerWebExchange
+import reactor.core.publisher.Mono
 
 const val HEADER_USER_ID = "X-User-ID"
 const val PREFIX_BEARER = "Bearer "
@@ -39,27 +42,29 @@ class AuthenticatedGatewayFilterFactory(
         reactiveJwtDecoder
             .decode(token)
             .doOnNext { checkScope(config, it) }
-            .flatMap {
-                val subject = it.subject
-
-                val request = exchange
-                    .request
-                    .mutate()
-                    .headers { headers ->
-                        headers.remove(AUTHORIZATION)
-                        headers[HEADER_USER_ID] = subject
-                    }
-                    .build()
-                    .let { req ->
-                        exchange.mutate().request(req).build()
-                    }
-
-                chain.filter(request)
-            }
+            .flatMap { mutate(exchange, chain, it) }
             .onErrorMap { handle(it) }
     }
 
     override fun shortcutFieldOrder(): List<String> = listOf(CLAIM_SCOPE)
+
+    private fun mutate(exchange: ServerWebExchange, chain: GatewayFilterChain, jwt: Jwt): Mono<Void> {
+        val subject = jwt.subject
+        val request = exchange
+            .request
+            .mutate()
+            .headers { headers ->
+                headers.remove(AUTHORIZATION)
+                headers[HEADER_USER_ID] = subject
+            }
+            .build()
+        val mutated = exchange
+            .mutate()
+            .request(request)
+            .build()
+
+        return chain.filter(mutated)
+    }
 
     private fun checkScope(config: Config, jwt: Jwt) {
         // Passed scope is empty. No need to validate

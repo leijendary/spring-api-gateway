@@ -53,21 +53,21 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine")
 
     // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.3")
 
     // Devtools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     // Tracing
-    implementation("com.github.loki4j:loki-logback-appender:1.4.0-m1")
+    implementation("com.github.loki4j:loki-logback-appender:1.4.0")
     implementation("io.micrometer:micrometer-observation")
     implementation("io.micrometer:micrometer-tracing-bridge-otel")
     implementation("io.micrometer:micrometer-registry-prometheus")
     implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 
     // Test
-    testImplementation("com.ninja-squad:springmockk:4.0.0")
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 
     // Test Containers
     testImplementation("org.testcontainers:junit-jupiter")
