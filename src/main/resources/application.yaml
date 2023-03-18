@@ -16,8 +16,8 @@ info:
       url: https://leijendary.com
 
 auth:
-  audience:
-  issuer:
+  audience: https://leijendary.com
+  issuer: https://leijendary.com
   jwkSetUri:
 
 request:
@@ -385,6 +385,9 @@ spring:
     redis:
       host:
       port:
+      ssl: true
+      username:
+      password:
 
 server:
   error:

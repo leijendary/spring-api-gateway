@@ -7,11 +7,13 @@ import {
   CpuArchitecture,
   LogDriver,
   OperatingSystemFamily,
+  Secret,
   TaskDefinition,
   TaskDefinitionProps,
 } from "aws-cdk-lib/aws-ecs";
 import { PolicyDocument, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
+import { Secret as SecretManager } from "aws-cdk-lib/aws-secretsmanager";
 import { Construct } from "constructs";
 import env, { isProd } from "../env";
 
@@ -33,8 +35,8 @@ export class TaskDefinitionConstruct extends TaskDefinition {
     const { repositoryArn } = props;
     const memoryMiB = isProd() ? "2 GB" : "0.5 GB";
     const cpu = isProd() ? "1 vCPU" : "0.25 vCPU";
-    const repository = Repository.fromRepositoryArn(scope, `${id}Repository-${environment}`, repositoryArn);
-    const image = ContainerImage.fromEcrRepository(repository, imageTag);
+    const repository = getRepository(scope, repositoryArn);
+    const image = getImage(repository);
     const logGroup = createLogGroup(scope);
     const taskRole = createTaskRole(scope);
     const executionRole = createExecutionRole(scope, logGroup, repository);
@@ -53,11 +55,13 @@ export class TaskDefinitionConstruct extends TaskDefinition {
 
     super(scope, `${id}TaskDefinition-${environment}`, config);
 
-    this.container(image, logGroup);
+    this.container(scope, image, logGroup);
     this.trustPolicy(taskRole, executionRole);
   }
 
-  private container(image: ContainerImage, logGroup: LogGroup) {
+  private container(scope: Construct, image: ContainerImage, logGroup: LogGroup) {
+    const dataSourceCredentials = getDataSourceCredentials(scope);
+
     this.addContainer(`${id}Container-${environment}`, {
       containerName: name,
       image,
@@ -76,6 +80,10 @@ export class TaskDefinitionConstruct extends TaskDefinition {
       environment: {
         SPRING_PROFILES_ACTIVE: environment,
       },
+      secrets: {
+        SPRING_DATA_REDIS_USERNAME: dataSourceCredentials.redis.username,
+        SPRING_DATA_REDIS_PASSWORD: dataSourceCredentials.redis.password,
+      }
     });
   }
 
@@ -129,4 +137,27 @@ const createExecutionRole = (scope: Construct, logGroup: LogGroup, repository: I
       }),
     },
   });
+};
+
+const getRepository = (scope: Construct, repositoryArn: string) => {
+  return Repository.fromRepositoryArn(scope, `${id}Repository-${environment}`, repositoryArn);
+};
+
+const getImage = (repository: IRepository) => {
+  return ContainerImage.fromEcrRepository(repository, imageTag);
+};
+
+const getDataSourceCredentials = (scope: Construct) => {
+  const credential = SecretManager.fromSecretNameV2(
+    scope,
+    `${id}DataStorageSecret-${environment}`,
+    `data-storage-${environment}`
+  );
+
+  return {
+    redis: {
+      username: Secret.fromSecretsManager(credential, "redis.username"),
+      password: Secret.fromSecretsManager(credential, "redis.password"),
+    },
+  };
 };

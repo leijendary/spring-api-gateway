@@ -1,0 +1,8 @@
+auth:
+  audience: http://localhost
+  issuer: http://localhost
+
+spring:
+  data:
+    redis:
+      ssl: false
