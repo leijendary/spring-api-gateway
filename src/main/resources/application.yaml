@@ -450,9 +450,6 @@ management:
     web:
       exposure:
         include: health, gateway, prometheus
-  tracing:
-    sampling:
-      probability: 1.0
   zipkin:
     tracing:
       endpoint:
