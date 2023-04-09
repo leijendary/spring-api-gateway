@@ -53,7 +53,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine")
 
     // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.3")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
 
     // Devtools
     developmentOnly("org.springframework.boot:spring-boot-devtools")

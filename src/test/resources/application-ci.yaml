@@ -10,5 +10,10 @@ spring:
           instances:
             iam:
               - uri: http://localhost:81
+            notification:
+              - uri: http://localhost:83
             sample:
               - uri: http://localhost:82
+  data:
+    redis:
+      ssl: false
