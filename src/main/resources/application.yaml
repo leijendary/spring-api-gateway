@@ -34,10 +34,6 @@ retry:
 spring:
   application:
     name: \${info.app.name}
-  main:
-    bannerMode: log
-  messages:
-    basename: messages.access, messages.error
   cloud:
     discovery:
       client:
@@ -431,6 +427,10 @@ spring:
       ssl: true
       username:
       password:
+  main:
+    bannerMode: log
+  messages:
+    basename: messages.access, messages.error
 
 server:
   error:
