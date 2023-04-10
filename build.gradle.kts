@@ -17,7 +17,6 @@ configurations {
     }
     testImplementation {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-        exclude(module = "mockito-core")
     }
 }
 
@@ -67,7 +66,8 @@ dependencies {
     implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
 
     // Test
-    testImplementation("com.ninja-squad:springmockk:4.0.2")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
+    testImplementation("org.mockito:mockito-inline:5.2.0")
 
     // Test Containers
     testImplementation("org.testcontainers:junit-jupiter")
