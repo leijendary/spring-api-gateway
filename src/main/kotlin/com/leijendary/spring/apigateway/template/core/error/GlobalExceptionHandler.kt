@@ -1,9 +1,9 @@
 package com.leijendary.spring.apigateway.template.core.error
 
 import com.leijendary.spring.apigateway.template.core.exception.ErrorModelException
-import com.leijendary.spring.apigateway.template.core.extension.AnyExtension.toJson
 import com.leijendary.spring.apigateway.template.core.extension.fullPath
 import com.leijendary.spring.apigateway.template.core.extension.logger
+import com.leijendary.spring.apigateway.template.core.extension.toJson
 import com.leijendary.spring.apigateway.template.core.model.ErrorModel
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler
 import org.springframework.context.MessageSource
@@ -36,7 +36,7 @@ class GlobalExceptionHandler(private val messageSource: MessageSource) : ErrorWe
         response.rawStatusCode = status
 
         val json = errors.toJson()
-        val dataBuffer = response.bufferFactory().wrap(json?.toByteArray(UTF_8) ?: byteArrayOf(0))
+        val dataBuffer = response.bufferFactory().wrap(json.toByteArray(UTF_8))
 
         return response.writeWith(just(dataBuffer))
     }
