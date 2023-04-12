@@ -19,10 +19,6 @@ import reactor.core.publisher.Mono
 import reactor.core.publisher.Mono.just
 import java.nio.charset.StandardCharsets.UTF_8
 
-/**
- * Handle Gateway errors. This has an order of -2 to surpass
- * DefaultErrorWebExceptionHandler which has an order of -1
- */
 @Component
 @Order
 class GlobalExceptionHandler(private val messageSource: MessageSource) : ErrorWebExceptionHandler {
