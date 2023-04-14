@@ -51,12 +51,12 @@ dependencies {
     // Cache
     implementation("com.github.ben-manes.caffeine:caffeine")
 
-    // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
-
     // Devtools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // OpenAPI
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
 
     // Tracing
     implementation("com.github.loki4j:loki-logback-appender:1.4.0")
