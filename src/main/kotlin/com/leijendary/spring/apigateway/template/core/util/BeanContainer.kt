@@ -5,6 +5,6 @@ import com.leijendary.spring.apigateway.template.core.util.SpringContext.Compani
 import io.micrometer.tracing.Tracer
 
 object BeanContainer {
-    val OBJECT_MAPPER = getBean(ObjectMapper::class)
-    val TRACER = getBean(Tracer::class)
+    val OBJECT_MAPPER by lazy { getBean(ObjectMapper::class) }
+    val TRACER by lazy { getBean(Tracer::class) }
 }
