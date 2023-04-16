@@ -109,6 +109,26 @@ tasks {
 
     jacocoTestReport {
         dependsOn(test)
+        finalizedBy(jacocoTestCoverageVerification)
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                element = "CLASS"
+                includes = listOf("${project.group}.*")
+
+                limit {
+                    counter = "LINE"
+                    minimum = "1.0".toBigDecimal()
+                }
+
+                limit {
+                    counter = "BRANCH"
+                    minimum = "1.0".toBigDecimal()
+                }
+            }
+        }
     }
 
     processResources {

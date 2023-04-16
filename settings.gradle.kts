@@ -1,1 +1,1 @@
-rootProject.name = "spring-api-gateway-template"
+rootProject.name = "api-gateway-template"
