@@ -1,7 +1,7 @@
 package com.leijendary.spring.apigateway.template.core.extension
 
-import com.leijendary.spring.apigateway.template.core.util.BeanContainer.OBJECT_MAPPER
+import com.leijendary.spring.apigateway.template.core.util.BeanContainer.objectMapper
 
 fun Any.toJson(): String {
-    return OBJECT_MAPPER.writeValueAsString(this)
+    return objectMapper.writeValueAsString(this)
 }
