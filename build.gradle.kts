@@ -29,9 +29,6 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     testImplementation(kotlin("test"))
 
-    // Kotlinx
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-
     // Spring Boot Starter
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
