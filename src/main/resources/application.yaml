@@ -151,6 +151,22 @@ spring:
           filters:
             - Authenticated
 
+        # Picture
+        - id: picture-link-get-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/picture/link
+            - Method=GET
+          filters:
+            - Authenticated
+        - id: picture-link-put-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/picture/link
+            - Method=PUT
+          filters:
+            - Authenticated
+
         # Address
         - id: address-list-v1
           uri: lb://iam
