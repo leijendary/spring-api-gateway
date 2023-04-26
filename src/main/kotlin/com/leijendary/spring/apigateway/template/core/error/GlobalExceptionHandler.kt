@@ -26,6 +26,10 @@ class GlobalExceptionHandler(private val messageSource: MessageSource) : ErrorWe
     private val genericErrorData = errorData(listOf("server", "internal"), "error.generic")
 
     override fun handle(exchange: ServerWebExchange, exception: Throwable): Mono<Void> {
+        if (exception is UnsupportedOperationException) {
+            return exchange.response.setComplete()
+        }
+
         val (errors, status) = buildErrorResponse(exchange, exception)
         val response = exchange.response
         response.headers.contentType = APPLICATION_JSON
