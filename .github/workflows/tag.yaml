@@ -1,12 +1,13 @@
 on:
   push:
     tags:
-      - '*'
+      - "*"
 
 jobs:
   docker:
     name: Tag Image
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     environment: prod
     steps:
       - name: Configure AWS Credentials

@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
     environment: ${{ inputs.environment }}
     steps:
       - name: Checkout
@@ -16,8 +17,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: 19
-          distribution: 'zulu'
-          cache: 'gradle'
+          distribution: "zulu"
+          cache: "gradle"
       - name: Execute Gradle Test
         uses: gradle/gradle-build-action@v2
         with:
