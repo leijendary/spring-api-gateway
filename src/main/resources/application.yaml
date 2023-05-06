@@ -432,7 +432,8 @@ spring:
             - Method=DELETE
           filters:
             - Authenticated=urn:sample:delete:v1
-
+      restrictivePropertyAccessor:
+        enabled: false
     serviceRegistry:
       autoRegistration:
         enabled: false
