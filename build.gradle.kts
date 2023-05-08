@@ -1,8 +1,8 @@
 plugins {
-    id("org.springframework.boot") version "3.0.2"
+    id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
+    kotlin("jvm") version "1.8.21"
+    kotlin("plugin.spring") version "1.8.21"
 }
 
 group = "com.leijendary.spring"
@@ -72,7 +72,7 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom("io.micrometer:micrometer-tracing-bom:1.0.1")
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.1")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
         mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
     }
 }
