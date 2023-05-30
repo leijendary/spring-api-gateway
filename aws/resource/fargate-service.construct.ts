@@ -27,13 +27,12 @@ const { id: namespaceId, name: namespaceName } = env.namespace;
 
 export class FargateServiceConstruct extends FargateService {
   constructor(scope: Construct, props: FargateServiceConstructProps) {
-    const { vpcId, clusterArn, listenerArn, namespaceArn, taskDefinition, ...rest } = props;
+    const { vpcId, clusterArn, listenerArn, namespaceArn, taskDefinition } = props;
     const vpc = getVpc(scope, vpcId);
     const securityGroup = getSecurityGroup(scope, vpc);
     const namespace = getNamespace(scope, namespaceArn);
     const cluster = getCluster(scope, clusterArn, vpc, securityGroup, namespace);
     const config: FargateServiceProps = {
-      ...rest,
       cluster,
       serviceName: name,
       securityGroups: [securityGroup],
