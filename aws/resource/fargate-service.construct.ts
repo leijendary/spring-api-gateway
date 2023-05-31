@@ -92,7 +92,6 @@ export class FargateServiceConstruct extends FargateService {
         interval: Duration.seconds(isProd() ? 30 : 90),
       },
     });
-
     const listener = ApplicationListener.fromLookup(scope, `${id}Listener-${environment}`, { listenerArn });
     listener.addTargetGroups(groupId, {
       targetGroups: [targetGroup],
