@@ -37,7 +37,7 @@ export class FargateServiceConstruct extends FargateService {
       serviceName: name,
       securityGroups: [securityGroup],
       taskDefinition,
-      healthCheckGracePeriod: Duration.seconds(isProd() ? 0 : 200),
+      healthCheckGracePeriod: Duration.seconds(isProd() ? 0 : 100),
       minHealthyPercent: 100,
       maxHealthyPercent: 200,
       desiredCount: 1,
