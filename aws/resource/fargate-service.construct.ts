@@ -88,6 +88,8 @@ export class FargateServiceConstruct extends FargateService {
       healthCheck: {
         enabled: true,
         path: "/actuator/health",
+        timeout: Duration.seconds(isProd() ? 5 : 30),
+        interval: Duration.seconds(isProd() ? 30 : 60),
       },
     });
 
