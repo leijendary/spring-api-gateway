@@ -49,10 +49,9 @@ spring:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowCredentials: true
-            allowedOriginPatterns: '*'
-            allowedMethods: '*'
+            allowedOrigins: \${auth.audience}
             allowedHeaders: '*'
+            allowedMethods: '*'
       httpclient:
         connectTimeout: 60000
         responseTimeout: 1m

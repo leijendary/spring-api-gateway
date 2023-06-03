@@ -1,5 +1,5 @@
 auth:
-  audience: http://localhost
+  audience: https://localhost
   issuer: http://localhost
 
 spring:

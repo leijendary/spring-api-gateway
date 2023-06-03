@@ -1,4 +1,4 @@
 auth:
-  audience: http://test.leijendary.com
+  audience: https://test.leijendary.com
   issuer: http://iam.test.leijendary.com
   jwkSetUri: http://iam.test.leijendary.local/api/v1/.well-known/jwks.json
