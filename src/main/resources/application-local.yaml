@@ -5,4 +5,5 @@ auth:
 spring:
   data:
     redis:
-      ssl: false
+      ssl:
+        enabled: false

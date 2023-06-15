@@ -440,11 +440,14 @@ spring:
         enabled: false
       host:
       port:
-      ssl: true
+      ssl:
+        enabled: true
       username:
       password:
+  jackson:
+    defaultPropertyInclusion: NON_ABSENT
   main:
-    bannerMode: log
+    bannerMode: LOG
   messages:
     basename: messages.access, messages.error
 
