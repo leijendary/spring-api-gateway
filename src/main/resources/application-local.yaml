@@ -3,6 +3,12 @@ auth:
   issuer: http://localhost
 
 spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: '*'
   data:
     redis:
       ssl:

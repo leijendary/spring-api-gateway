@@ -22,12 +22,19 @@ const val HEADER_USER_ID = "X-User-ID"
 const val PREFIX_BEARER = "Bearer "
 const val CLAIM_SCOPE = "scope"
 
+private val sourceAuthorization = listOf("header", AUTHORIZATION)
+private val sourceScope = listOf("header", AUTHORIZATION, "scope")
+
 @Component
 class AuthenticatedGatewayFilterFactory(
     private val messageSource: MessageSource,
     private val reactiveJwtDecoder: ReactiveJwtDecoder,
 ) : AbstractGatewayFilterFactory<Config>(Config::class.java) {
     private val log = logger()
+    private val deniedError = errorData(sourceScope, "access.denied")
+    private val expiredError = errorData(sourceAuthorization, "access.expired")
+    private val invalidError = errorData(sourceAuthorization, "access.invalid")
+    private val unauthorizedError = errorData(sourceAuthorization, "access.unauthorized")
 
     class Config {
         var scope: String = ""
@@ -37,7 +44,7 @@ class AuthenticatedGatewayFilterFactory(
         val token = exchange.request.headers[AUTHORIZATION]
             ?.first()
             ?.replaceFirst(PREFIX_BEARER, "")
-            ?: throw unauthorizedException()
+            ?: throw UnauthorizedException(unauthorizedError)
 
         reactiveJwtDecoder
             .decode(token)
@@ -82,7 +89,7 @@ class AuthenticatedGatewayFilterFactory(
         val hasScope = configScopes.any { it in jwtScopes }
 
         if (!hasScope) {
-            throw accessDeniedException()
+            throw AccessDeniedException(deniedError)
         }
     }
 
@@ -93,37 +100,13 @@ class AuthenticatedGatewayFilterFactory(
             log.warn(message)
 
             if (message.contains("expired")) {
-                throw expiredTokenException()
+                throw UnauthorizedException(expiredError)
             }
 
-            throw invalidTokenException()
+            throw UnauthorizedException(invalidError)
         }
 
         else -> it
-    }
-
-    private fun unauthorizedException(): UnauthorizedException {
-        val errorData = errorData(listOf("header", "authorization"), "access.unauthorized")
-
-        return UnauthorizedException(errorData)
-    }
-
-    private fun invalidTokenException(): UnauthorizedException {
-        val errorData = errorData(listOf("header", "authorization"), "access.invalid")
-
-        return UnauthorizedException(errorData)
-    }
-
-    private fun expiredTokenException(): UnauthorizedException {
-        val errorData = errorData(listOf("header", "authorization"), "access.expired")
-
-        return UnauthorizedException(errorData)
-    }
-
-    private fun accessDeniedException(): AccessDeniedException {
-        val errorData = errorData(listOf("header", "authorization", "scope"), "access.denied")
-
-        return AccessDeniedException(errorData)
     }
 
     private fun errorData(sources: List<String>, code: String): ErrorModel {

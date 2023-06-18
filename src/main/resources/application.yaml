@@ -45,6 +45,8 @@ spring:
               - uri:
             sample:
               - uri:
+            websocket:
+              - uri:
     gateway:
       globalcors:
         corsConfigurations:
@@ -431,6 +433,12 @@ spring:
             - Method=DELETE
           filters:
             - Authenticated=urn:sample:delete:v1
+
+        # WebSocket
+        - id: websocket
+          uri: lb:ws://websocket
+          predicates:
+            - Path=/websocket/**
     serviceRegistry:
       autoRegistration:
         enabled: false
