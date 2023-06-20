@@ -33,16 +33,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-redis-reactive")
 
+    // Spring Cloud Starter
+    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
+    implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
+
     // Spring Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // Spring Security
     implementation("org.springframework.security:spring-security-oauth2-jose")
     testImplementation("org.springframework.security:spring-security-test")
-
-    // Spring Cloud Starter
-    implementation("org.springframework.cloud:spring-cloud-starter-gateway")
-    implementation("org.springframework.cloud:spring-cloud-starter-loadbalancer")
 
     // Cache
     implementation("com.github.ben-manes.caffeine:caffeine")

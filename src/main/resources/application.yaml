@@ -14,6 +14,9 @@ info:
     license:
       name: Jonathan Leijendekker
       url: https://leijendary.com
+    servers:
+      - url: http://localhost
+        description: local
 
 auth:
   audience: https://leijendary.com
@@ -69,6 +72,32 @@ spring:
             burstCapacity: 20
             requestedTokens: 1
       routes:
+        # OpenAPI
+        - id: sample-openapi
+          uri: lb://sample
+          predicates:
+            - Path=/sample/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: iam-openapi
+          uri: lb://iam
+          predicates:
+            - Path=/iam/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: notification-openapi
+          uri: lb://notification
+          predicates:
+            - Path=/notification/v3/api-docs
+          filters:
+            - StripPrefix=1
+        - id: websocket-openapi
+          uri: lb://websocket
+          predicates:
+            - Path=/websocket/v3/api-docs
+          filters:
+            - StripPrefix=1
+
         # Token
         - id: token-create-v1
           uri: lb://iam
@@ -466,6 +495,18 @@ server:
   http2:
     enabled: true
   port: 80
+
+springdoc:
+  swaggerUi:
+    urls:
+      - name: IAM
+        url: /iam/v3/api-docs
+      - name: Notification
+        url: /notification/v3/api-docs
+      - name: Sample
+        url: /sample/v3/api-docs
+      - name: WebSocket
+        url: /websocket/v3/api-docs
 
 management:
   endpoint:
