@@ -1,5 +1,5 @@
 plugins {
-    id("org.springframework.boot") version "3.1.0"
+    id("org.springframework.boot") version "3.1.1"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.8.21"
     kotlin("plugin.spring") version "1.8.21"
@@ -55,11 +55,11 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
 
     // Tracing
-    implementation("com.github.loki4j:loki-logback-appender:1.4.0")
-    implementation("io.micrometer:micrometer-observation")
-    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation("com.github.loki4j:loki-logback-appender:1.4.1")
     implementation("io.micrometer:micrometer-registry-prometheus")
-    implementation("io.opentelemetry:opentelemetry-exporter-zipkin")
+    implementation("io.micrometer:micrometer-tracing-bridge-otel")
+    implementation("io.opentelemetry:opentelemetry-exporter-otlp")
+    implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.0.2")
 
     // Test
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
@@ -71,9 +71,9 @@ dependencies {
 
 dependencyManagement {
     imports {
-        mavenBom("io.micrometer:micrometer-tracing-bom:1.0.1")
-        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.2")
-        mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
+        mavenBom("io.micrometer:micrometer-tracing-bom:1.1.2")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:2022.0.3")
+        mavenBom("org.testcontainers:testcontainers-bom:1.18.3")
     }
 }
 
