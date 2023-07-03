@@ -518,7 +518,10 @@ management:
     web:
       exposure:
         include: health, gateway, prometheus
-  zipkin:
+  otlp:
+    metrics:
+      export:
+        url:
     tracing:
       endpoint:
 
