@@ -423,6 +423,13 @@ spring:
             - Method=DELETE
           filters:
             - Authenticated
+        - id: notification-count-v1
+          uri: lb://notification
+          predicates:
+            - Path=/api/v1/notifications/count
+            - Method=GET
+          filters:
+            - Authenticated
 
         # Sample
         - id: sample-list-v1
