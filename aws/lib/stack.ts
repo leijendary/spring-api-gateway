@@ -21,12 +21,10 @@ export class ApplicationStack extends Stack {
     const listenerArn = `arn:aws:elasticloadbalancing:${region}:${account}:listener/${listenerPath}`;
     const namespaceArn = `arn:aws:servicediscovery:${region}:${account}:namespace/${namespaceId}`;
     const taskDefinition = new TaskDefinitionConstruct(this, {
-      ...props,
       repositoryArn,
     });
 
     new FargateServiceConstruct(this, {
-      ...props,
       vpcId,
       clusterArn,
       listenerArn,

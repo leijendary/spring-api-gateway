@@ -24,11 +24,10 @@ type TaskDefinitionConstructProps = {
 const environment = env.environment;
 const imageTag = env.imageTag;
 const { id, name } = env.stack;
+const port = env.port;
 const family = `${name}-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";
-
-const port = env.port;
 
 export class TaskDefinitionConstruct extends TaskDefinition {
   constructor(scope: Construct, props: TaskDefinitionConstructProps) {
@@ -83,7 +82,7 @@ export class TaskDefinitionConstruct extends TaskDefinition {
       secrets: {
         SPRING_DATA_REDIS_USERNAME: dataSourceCredentials.redis.username,
         SPRING_DATA_REDIS_PASSWORD: dataSourceCredentials.redis.password,
-      }
+      },
     });
   }
 
