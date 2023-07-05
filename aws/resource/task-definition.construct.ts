@@ -22,9 +22,9 @@ type TaskDefinitionConstructProps = {
 };
 
 const environment = env.environment;
+const port = env.port;
 const imageTag = env.imageTag;
 const { id, name } = env.stack;
-const port = env.port;
 const family = `${name}-${environment}`;
 const assumedBy = new ServicePrincipal("ecs-tasks.amazonaws.com");
 const logPrefix = "/ecs/fargate";
