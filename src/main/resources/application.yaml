@@ -17,13 +17,13 @@ info:
     servers:
       - url: http://localhost
         description: Local
-      - url: https://api.dev.localhost.com
+      - url: https://api.dev.leijendary.com
         description: Development
-      - url: https://api.test.localhost.com
+      - url: https://api.test.leijendary.com
         description: Testing
-      - url: https://api.staging.localhost.com
+      - url: https://api.staging.leijendary.com
         description: Staging
-      - url: https://api.localhost.com
+      - url: https://api.leijendary.com
         description: Production
 
 auth:
