@@ -16,15 +16,15 @@ info:
       url: https://leijendary.com
     servers:
       - url: http://localhost
-        description: local
-      - url: https://dev.localhost.com
-        description: dev
-      - url: https://test.localhost.com
-        description: test
-      - url: https://staging.localhost.com
-        description: staging
-      - url: https://localhost.com
-        description: prod
+        description: Local
+      - url: https://api.dev.localhost.com
+        description: Development
+      - url: https://api.test.localhost.com
+        description: Testing
+      - url: https://api.staging.localhost.com
+        description: Staging
+      - url: https://api.localhost.com
+        description: Production
 
 auth:
   audience: https://leijendary.com
