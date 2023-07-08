@@ -151,6 +151,15 @@ spring:
             - Path=/api/v1/password/reset
             - Method=POST
 
+        # Account
+        - id: account-delete-v1
+          uri: lb://iam
+          predicates:
+            - Path=/api/v1/accounts
+            - Method=DELETE
+          filters:
+            - Authenticated
+
         # Profile
         - id: profile-get-v1
           uri: lb://iam
