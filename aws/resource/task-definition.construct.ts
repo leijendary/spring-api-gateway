@@ -59,7 +59,7 @@ export class TaskDefinitionConstruct extends TaskDefinition {
   }
 
   private container(scope: Construct, image: ContainerImage, logGroup: LogGroup) {
-    const dataSourceCredentials = getDataSourceCredentials(scope);
+    const dataStorageCredentials = getDataStorageCredentials(scope);
 
     this.addContainer(`${id}Container-${environment}`, {
       containerName: name,
@@ -80,8 +80,8 @@ export class TaskDefinitionConstruct extends TaskDefinition {
         SPRING_PROFILES_ACTIVE: environment,
       },
       secrets: {
-        SPRING_DATA_REDIS_USERNAME: dataSourceCredentials.redis.username,
-        SPRING_DATA_REDIS_PASSWORD: dataSourceCredentials.redis.password,
+        SPRING_DATA_REDIS_USERNAME: dataStorageCredentials.redis.username,
+        SPRING_DATA_REDIS_PASSWORD: dataStorageCredentials.redis.password,
       },
     });
   }
@@ -146,7 +146,7 @@ const getImage = (repository: IRepository) => {
   return ContainerImage.fromEcrRepository(repository, imageTag);
 };
 
-const getDataSourceCredentials = (scope: Construct) => {
+const getDataStorageCredentials = (scope: Construct) => {
   const credential = SecretManager.fromSecretNameV2(
     scope,
     `${id}DataStorageSecret-${environment}`,
