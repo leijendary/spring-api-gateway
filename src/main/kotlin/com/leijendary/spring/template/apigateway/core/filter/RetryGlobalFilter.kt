@@ -23,5 +23,5 @@ class RetryGlobalFilter(retryProperties: RetryProperties) : RetryGatewayFilterFa
             .filter(exchange, chain)
     }
 
-    override fun getOrder() = HIGHEST_PRECEDENCE + 3
+    override fun getOrder() = HIGHEST_PRECEDENCE + 4
 }
