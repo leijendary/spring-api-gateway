@@ -497,8 +497,6 @@ spring:
         enabled: false
   data:
     redis:
-      repositories:
-        enabled: false
       host:
       port:
       ssl:
