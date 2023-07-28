@@ -42,7 +42,7 @@ class AuthorizationGlobalFilter(
         return reactiveJwtDecoder
             .decode(token)
             .flatMap { mutate(exchange, chain, it) }
-            .onErrorMap { handle(it) }
+            .onErrorMap(::handle)
     }
 
     override fun getOrder() = HIGHEST_PRECEDENCE + 3
