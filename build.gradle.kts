@@ -51,8 +51,11 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
+    // Jackson
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
     // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.4")
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
 
     // Tracing
     implementation("com.github.loki4j:loki-logback-appender:1.4.1")
