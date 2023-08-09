@@ -1,5 +1,5 @@
 auth:
-  audience: https://localhost
+  audience: http://localhost
   issuer: http://localhost
 
 spring:
@@ -7,8 +7,10 @@ spring:
     gateway:
       globalcors:
         corsConfigurations:
-          '[/**]':
-            allowedOrigins: '*'
+          "[/**]":
+            allowedOrigins:
+              - \${auth.audience}
+              - http://localhost:3000
   data:
     redis:
       ssl:

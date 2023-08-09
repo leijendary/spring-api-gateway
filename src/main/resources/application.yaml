@@ -60,11 +60,17 @@ spring:
               - uri:
     gateway:
       globalcors:
+        addToSimpleUrlHandlerMapping: true
         corsConfigurations:
-          '[/**]':
+          "[/**]":
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
             allowedOrigins: \${auth.audience}
-            allowedHeaders: '*'
-            allowedMethods: '*'
       httpclient:
         connectTimeout: 60000
         responseTimeout: 1m
