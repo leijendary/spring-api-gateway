@@ -2,3 +2,13 @@ auth:
   audience: https://dev.leijendary.com
   issuer: http://iam.dev.leijendary.com
   jwkSetUri: http://iam.dev.leijendary.local/api/v1/.well-known/jwks.json
+
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          "[/**]":
+            allowedOrigins:
+              - \${auth.audience}
+              - http://localhost:3000
