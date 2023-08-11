@@ -1,7 +1,6 @@
 package com.leijendary.spring.template.apigateway.core.filter
 
 import com.leijendary.spring.template.apigateway.core.exception.UnauthorizedException
-import com.leijendary.spring.template.apigateway.core.extension.logger
 import com.leijendary.spring.template.apigateway.core.model.ErrorModel
 import org.springframework.cloud.gateway.filter.GatewayFilterChain
 import org.springframework.cloud.gateway.filter.GlobalFilter
@@ -10,6 +9,7 @@ import org.springframework.context.i18n.LocaleContextHolder.getLocale
 import org.springframework.core.Ordered
 import org.springframework.core.Ordered.HIGHEST_PRECEDENCE
 import org.springframework.http.HttpHeaders.AUTHORIZATION
+import org.springframework.security.oauth2.jwt.BadJwtException
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtException
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder
@@ -29,7 +29,6 @@ class AuthorizationGlobalFilter(
     private val messageSource: MessageSource,
     private val reactiveJwtDecoder: ReactiveJwtDecoder,
 ) : GlobalFilter, Ordered {
-    private val log = logger()
     private val expiredError = errorData("access.expired")
     private val invalidError = errorData("access.invalid")
 
@@ -39,10 +38,13 @@ class AuthorizationGlobalFilter(
             ?.replaceFirst(PREFIX_BEARER, "")
             ?: return chain.filter(exchange)
 
-        return reactiveJwtDecoder
-            .decode(token)
-            .flatMap { mutate(exchange, chain, it) }
-            .onErrorMap(::handle)
+        return try {
+            reactiveJwtDecoder.decode(token)
+                .flatMap { mutate(exchange, chain, it) }
+                .onErrorMap { handle(it) }
+        } catch (_: BadJwtException) {
+            throw UnauthorizedException(invalidError)
+        }
     }
 
     override fun getOrder() = HIGHEST_PRECEDENCE + 3
@@ -67,11 +69,7 @@ class AuthorizationGlobalFilter(
 
     private fun handle(it: Throwable) = when (it) {
         is JwtException -> {
-            val message = it.message!!
-
-            log.warn(message)
-
-            if (message.contains("expired")) {
+            if (it.message!!.contains("expired")) {
                 throw UnauthorizedException(expiredError)
             }
 
