@@ -15,3 +15,7 @@ spring:
     redis:
       ssl:
         enabled: false
+
+management:
+  tracing:
+    probability: 1.0
